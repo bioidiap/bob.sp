@@ -58,8 +58,10 @@ static int PyBobSpIFFT2D_InitCopy
 
   try {
     self->cxx = new bob::sp::IFFT2D(*(copy->cxx));
-    if (!self->cxx) PyErr_Format(PyExc_MemoryError, "cannot create new object of type `%s' - no more memory", Py_TYPE(self)->tp_name);
-    return -1;
+    if (!self->cxx) {
+      PyErr_Format(PyExc_MemoryError, "cannot create new object of type `%s' - no more memory", Py_TYPE(self)->tp_name);
+      return -1;
+    }
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());
@@ -87,8 +89,10 @@ static int PyBobSpIFFT2D_InitShape(PyBobSpIFFT2DObject* self, PyObject *args,
 
   try {
     self->cxx = new bob::sp::IFFT2D(h, w);
-    if (!self->cxx) PyErr_Format(PyExc_MemoryError, "cannot create new object of type `%s' - no more memory", Py_TYPE(self)->tp_name);
-    return -1;
+    if (!self->cxx) {
+      PyErr_Format(PyExc_MemoryError, "cannot create new object of type `%s' - no more memory", Py_TYPE(self)->tp_name);
+      return -1;
+    }
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());

@@ -58,8 +58,10 @@ static int PyBobSpFFT1D_InitCopy
 
   try {
     self->cxx = new bob::sp::FFT1D(*(copy->cxx));
-    if (!self->cxx) PyErr_Format(PyExc_MemoryError, "cannot create new object of type `%s' - no more memory", Py_TYPE(self)->tp_name);
-    return -1;
+    if (!self->cxx) {
+      PyErr_Format(PyExc_MemoryError, "cannot create new object of type `%s' - no more memory", Py_TYPE(self)->tp_name);
+      return -1;
+    }
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());
@@ -86,8 +88,10 @@ static int PyBobSpFFT1D_InitShape(PyBobSpFFT1DObject* self, PyObject *args,
 
   try {
     self->cxx = new bob::sp::FFT1D(length);
-    if (!self->cxx) PyErr_Format(PyExc_MemoryError, "cannot create new object of type `%s' - no more memory", Py_TYPE(self)->tp_name);
-    return -1;
+    if (!self->cxx) {
+      PyErr_Format(PyExc_MemoryError, "cannot create new object of type `%s' - no more memory", Py_TYPE(self)->tp_name);
+      return -1;
+    }
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());
