@@ -58,6 +58,8 @@ static int PyBobSpFFT1D_InitCopy
 
   try {
     self->cxx = new bob::sp::FFT1D(*(copy->cxx));
+    if (!self->cxx) PyErr_Format(PyExc_MemoryError, "cannot create new object of type `%s' - no more memory", Py_TYPE(self)->tp_name);
+    return -1;
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());
@@ -82,7 +84,19 @@ static int PyBobSpFFT1D_InitShape(PyBobSpFFT1DObject* self, PyObject *args,
   Py_ssize_t length = 0;
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "n", kwlist, &length)) return -1;
 
-  self->cxx = new bob::sp::FFT1D(length);
+  try {
+    self->cxx = new bob::sp::FFT1D(length);
+    if (!self->cxx) PyErr_Format(PyExc_MemoryError, "cannot create new object of type `%s' - no more memory", Py_TYPE(self)->tp_name);
+    return -1;
+  }
+  catch (std::exception& ex) {
+    PyErr_SetString(PyExc_RuntimeError, ex.what());
+    return -1;
+  }
+  catch (...) {
+    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", Py_TYPE(self)->tp_name);
+    return -1;
+  }
 
   return 0; ///< SUCCESS
 
@@ -123,7 +137,7 @@ static int PyBobSpFFT1D_Init(PyBobSpFFT1DObject* self,
 
     default:
 
-      PyErr_Format(PyExc_RuntimeError, "number of arguments mismatch - %s requires 1 arguments, but you provided %" PY_FORMAT_SIZE_T "d (see help)", Py_TYPE(self)->tp_name, nargs);
+      PyErr_Format(PyExc_RuntimeError, "number of arguments mismatch - %s requires 1 argument, but you provided %" PY_FORMAT_SIZE_T "d (see help)", Py_TYPE(self)->tp_name, nargs);
 
   }
 
@@ -227,7 +241,7 @@ static int PyBobSpFFT1D_SetShape
   auto shape_ = make_safe(shape);
 
   if (PyTuple_GET_SIZE(shape) != 1) {
-    PyErr_Format(PyExc_RuntimeError, "`%s' shape can only be set using  1-position tuples (or sequences), not an %" PY_FORMAT_SIZE_T "d-position sequence", Py_TYPE(self)->tp_name, PyTuple_GET_SIZE(shape));
+    PyErr_Format(PyExc_RuntimeError, "`%s' shape can only be set using 1-position tuples (or sequences), not an %" PY_FORMAT_SIZE_T "d-position sequence", Py_TYPE(self)->tp_name, PyTuple_GET_SIZE(shape));
     return -1;
   }
 

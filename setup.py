@@ -38,7 +38,9 @@ setup(
       Extension("xbob.sp._library",
         [
           "xbob/sp/fft1d.cpp",
+          "xbob/sp/fft2d.cpp",
           "xbob/sp/ifft1d.cpp",
+          "xbob/sp/ifft2d.cpp",
           "xbob/sp/dct1d.cpp",
           "xbob/sp/idct1d.cpp",
           "xbob/sp/main.cpp",
