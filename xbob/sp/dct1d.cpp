@@ -17,7 +17,7 @@ PyDoc_STRVAR(s_fft1d_doc,
 "DCT1D(shape) -> new DCT1D operator\n\
 \n\
 Calculates the direct DCT of a 1D array/signal. Input and output\n\
-arrays are 1D NumPy array of type ``complex128``.\n\
+arrays are 1D NumPy array of type ``float64``.\n\
 "
 );
 
@@ -286,13 +286,13 @@ static PyObject* PyBobSpDCT1D_call
   auto input_ = make_safe(input);
   auto output_ = make_xsafe(output);
 
-  if (input->type_num != NPY_COMPLEX128) {
-    PyErr_Format(PyExc_TypeError, "`%s' only supports 128-bit complex (2x64-bit float) arrays for input array `input'", Py_TYPE(self)->tp_name);
+  if (input->type_num != NPY_FLOAT64) {
+    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit float arrays for input array `input'", Py_TYPE(self)->tp_name);
     return 0;
   }
 
-  if (output && output->type_num != NPY_COMPLEX128) {
-    PyErr_Format(PyExc_TypeError, "`%s' only supports 128-bit complex (2x64-bit float) arrays for output array `output'", Py_TYPE(self)->tp_name);
+  if (output && output->type_num != NPY_FLOAT64) {
+    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit float arrays for output array `output'", Py_TYPE(self)->tp_name);
     return 0;
   }
 
@@ -314,14 +314,14 @@ static PyObject* PyBobSpDCT1D_call
   /** if ``output`` was not pre-allocated, do it now **/
   if (!output) {
     Py_ssize_t length = self->cxx->getLength();
-    output = (PyBlitzArrayObject*)PyBlitzArray_SimpleNew(NPY_COMPLEX128, 1, &length);
+    output = (PyBlitzArrayObject*)PyBlitzArray_SimpleNew(NPY_FLOAT64, 1, &length);
     output_ = make_safe(output);
   }
 
   /** all basic checks are done, can call the operator now **/
   try {
-    self->cxx->operator()(*PyBlitzArrayCxx_AsBlitz<std::complex<double>,1>(input),
-        *PyBlitzArrayCxx_AsBlitz<std::complex<double>,1>(output));
+    self->cxx->operator()(*PyBlitzArrayCxx_AsBlitz<double,1>(input),
+        *PyBlitzArrayCxx_AsBlitz<double,1>(output));
   }
   catch (std::exception& e) {
     PyErr_SetString(PyExc_RuntimeError, e.what());
