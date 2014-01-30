@@ -282,7 +282,7 @@ static PyGetSetDef PyBobSpIFFT1D_getseters[] = {
     {0}  /* Sentinel */
 };
 
-static PyObject* PyBobSpIFFT1D_call
+static PyObject* PyBobSpIFFT1D_Call
 (PyBobSpIFFT1DObject* self, PyObject* args, PyObject* kwds) {
 
   static const char* const_kwlist[] = {"input", "output", 0};
@@ -354,20 +354,20 @@ static PyObject* PyBobSpIFFT1D_call
 PyTypeObject PyBobSpIFFT1D_Type = {
     PyVarObject_HEAD_INIT(0, 0)
     s_fft1d_str,                              /*tp_name*/
-    sizeof(PyBobSpIFFT1DObject),               /*tp_basicsize*/
+    sizeof(PyBobSpIFFT1DObject),              /*tp_basicsize*/
     0,                                        /*tp_itemsize*/
-    (destructor)PyBobSpIFFT1D_Delete,          /*tp_dealloc*/
+    (destructor)PyBobSpIFFT1D_Delete,         /*tp_dealloc*/
     0,                                        /*tp_print*/
     0,                                        /*tp_getattr*/
     0,                                        /*tp_setattr*/
     0,                                        /*tp_compare*/
-    (reprfunc)PyBobSpIFFT1D_Repr,              /*tp_repr*/
+    (reprfunc)PyBobSpIFFT1D_Repr,             /*tp_repr*/
     0,                                        /*tp_as_number*/
     0,                                        /*tp_as_sequence*/
     0,                                        /*tp_as_mapping*/
     0,                                        /*tp_hash */
-    (ternaryfunc)PyBobSpIFFT1D_call,           /* tp_call */
-    (reprfunc)PyBobSpIFFT1D_Repr,              /*tp_str*/
+    (ternaryfunc)PyBobSpIFFT1D_Call,          /* tp_call */
+    (reprfunc)PyBobSpIFFT1D_Repr,             /*tp_str*/
     0,                                        /*tp_getattro*/
     0,                                        /*tp_setattro*/
     0,                                        /*tp_as_buffer*/
@@ -375,19 +375,19 @@ PyTypeObject PyBobSpIFFT1D_Type = {
     s_fft1d_doc,                              /* tp_doc */
     0,		                                    /* tp_traverse */
     0,		                                    /* tp_clear */
-    (richcmpfunc)PyBobSpIFFT1D_RichCompare,    /* tp_richcompare */
+    (richcmpfunc)PyBobSpIFFT1D_RichCompare,   /* tp_richcompare */
     0,		                                    /* tp_weaklistoffset */
     0,		                                    /* tp_iter */
     0,		                                    /* tp_iternext */
     0,                                        /* tp_methods */
     0,                                        /* tp_members */
-    PyBobSpIFFT1D_getseters,                   /* tp_getset */
+    PyBobSpIFFT1D_getseters,                  /* tp_getset */
     0,                                        /* tp_base */
     0,                                        /* tp_dict */
     0,                                        /* tp_descr_get */
     0,                                        /* tp_descr_set */
     0,                                        /* tp_dictoffset */
-    (initproc)PyBobSpIFFT1D_Init,              /* tp_init */
+    (initproc)PyBobSpIFFT1D_Init,             /* tp_init */
     0,                                        /* tp_alloc */
     0,                                        /* tp_new */
 };

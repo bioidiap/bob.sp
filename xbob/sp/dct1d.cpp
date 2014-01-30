@@ -280,7 +280,7 @@ static PyGetSetDef PyBobSpDCT1D_getseters[] = {
     {0}  /* Sentinel */
 };
 
-static PyObject* PyBobSpDCT1D_call
+static PyObject* PyBobSpDCT1D_Call
 (PyBobSpDCT1DObject* self, PyObject* args, PyObject* kwds) {
 
   static const char* const_kwlist[] = {"input", "output", 0};
@@ -364,7 +364,7 @@ PyTypeObject PyBobSpDCT1D_Type = {
     0,                                        /*tp_as_sequence*/
     0,                                        /*tp_as_mapping*/
     0,                                        /*tp_hash */
-    (ternaryfunc)PyBobSpDCT1D_call,           /* tp_call */
+    (ternaryfunc)PyBobSpDCT1D_Call,           /* tp_call */
     (reprfunc)PyBobSpDCT1D_Repr,              /*tp_str*/
     0,                                        /*tp_getattro*/
     0,                                        /*tp_setattro*/

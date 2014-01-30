@@ -280,7 +280,7 @@ static PyGetSetDef PyBobSpIDCT1D_getseters[] = {
     {0}  /* Sentinel */
 };
 
-static PyObject* PyBobSpIDCT1D_call
+static PyObject* PyBobSpIDCT1D_Call
 (PyBobSpIDCT1DObject* self, PyObject* args, PyObject* kwds) {
 
   static const char* const_kwlist[] = {"input", "output", 0};
@@ -352,20 +352,20 @@ static PyObject* PyBobSpIDCT1D_call
 PyTypeObject PyBobSpIDCT1D_Type = {
     PyVarObject_HEAD_INIT(0, 0)
     s_fft1d_str,                              /*tp_name*/
-    sizeof(PyBobSpIDCT1DObject),               /*tp_basicsize*/
+    sizeof(PyBobSpIDCT1DObject),              /*tp_basicsize*/
     0,                                        /*tp_itemsize*/
-    (destructor)PyBobSpIDCT1D_Delete,          /*tp_dealloc*/
+    (destructor)PyBobSpIDCT1D_Delete,         /*tp_dealloc*/
     0,                                        /*tp_print*/
     0,                                        /*tp_getattr*/
     0,                                        /*tp_setattr*/
     0,                                        /*tp_compare*/
-    (reprfunc)PyBobSpIDCT1D_Repr,              /*tp_repr*/
+    (reprfunc)PyBobSpIDCT1D_Repr,             /*tp_repr*/
     0,                                        /*tp_as_number*/
     0,                                        /*tp_as_sequence*/
     0,                                        /*tp_as_mapping*/
     0,                                        /*tp_hash */
-    (ternaryfunc)PyBobSpIDCT1D_call,           /* tp_call */
-    (reprfunc)PyBobSpIDCT1D_Repr,              /*tp_str*/
+    (ternaryfunc)PyBobSpIDCT1D_Call,          /* tp_call */
+    (reprfunc)PyBobSpIDCT1D_Repr,             /*tp_str*/
     0,                                        /*tp_getattro*/
     0,                                        /*tp_setattro*/
     0,                                        /*tp_as_buffer*/
@@ -373,19 +373,19 @@ PyTypeObject PyBobSpIDCT1D_Type = {
     s_fft1d_doc,                              /* tp_doc */
     0,		                                    /* tp_traverse */
     0,		                                    /* tp_clear */
-    (richcmpfunc)PyBobSpIDCT1D_RichCompare,    /* tp_richcompare */
+    (richcmpfunc)PyBobSpIDCT1D_RichCompare,   /* tp_richcompare */
     0,		                                    /* tp_weaklistoffset */
     0,		                                    /* tp_iter */
     0,		                                    /* tp_iternext */
     0,                                        /* tp_methods */
     0,                                        /* tp_members */
-    PyBobSpIDCT1D_getseters,                   /* tp_getset */
+    PyBobSpIDCT1D_getseters,                  /* tp_getset */
     0,                                        /* tp_base */
     0,                                        /* tp_dict */
     0,                                        /* tp_descr_get */
     0,                                        /* tp_descr_set */
     0,                                        /* tp_dictoffset */
-    (initproc)PyBobSpIDCT1D_Init,              /* tp_init */
+    (initproc)PyBobSpIDCT1D_Init,             /* tp_init */
     0,                                        /* tp_alloc */
     0,                                        /* tp_new */
 };

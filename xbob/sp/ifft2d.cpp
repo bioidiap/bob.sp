@@ -311,7 +311,7 @@ static PyGetSetDef PyBobSpIFFT2D_getseters[] = {
     {0}  /* Sentinel */
 };
 
-static PyObject* PyBobSpIFFT2D_call
+static PyObject* PyBobSpIFFT2D_Call
 (PyBobSpIFFT2DObject* self, PyObject* args, PyObject* kwds) {
 
   static const char* const_kwlist[] = {"input", "output", 0};
@@ -402,7 +402,7 @@ PyTypeObject PyBobSpIFFT2D_Type = {
     0,                                        /*tp_as_sequence*/
     0,                                        /*tp_as_mapping*/
     0,                                        /*tp_hash */
-    (ternaryfunc)PyBobSpIFFT2D_call,          /* tp_call */
+    (ternaryfunc)PyBobSpIFFT2D_Call,          /* tp_call */
     (reprfunc)PyBobSpIFFT2D_Repr,             /*tp_str*/
     0,                                        /*tp_getattro*/
     0,                                        /*tp_setattro*/
