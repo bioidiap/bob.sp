@@ -17,6 +17,8 @@ extern PyTypeObject PyBobSpFFT2D_Type;
 extern PyTypeObject PyBobSpIFFT2D_Type;
 extern PyTypeObject PyBobSpDCT1D_Type;
 extern PyTypeObject PyBobSpIDCT1D_Type;
+extern PyTypeObject PyBobSpDCT2D_Type;
+extern PyTypeObject PyBobSpIDCT2D_Type;
 
 static PyMethodDef module_methods[] = {
     {0}  /* Sentinel */
@@ -55,6 +57,12 @@ static PyObject* create_module (void) {
   PyBobSpIDCT1D_Type.tp_new = PyType_GenericNew;
   if (PyType_Ready(&PyBobSpIDCT1D_Type) < 0) return 0;
 
+  PyBobSpDCT2D_Type.tp_new = PyType_GenericNew;
+  if (PyType_Ready(&PyBobSpDCT2D_Type) < 0) return 0;
+
+  PyBobSpIDCT2D_Type.tp_new = PyType_GenericNew;
+  if (PyType_Ready(&PyBobSpIDCT2D_Type) < 0) return 0;
+
 # if PY_VERSION_HEX >= 0x03000000
   PyObject* m = PyModule_Create(&module_definition);
 # else
@@ -84,6 +92,12 @@ static PyObject* create_module (void) {
 
   Py_INCREF(&PyBobSpIDCT1D_Type);
   if (PyModule_AddObject(m, "IDCT1D", (PyObject *)&PyBobSpIDCT1D_Type) < 0) return 0;
+
+  Py_INCREF(&PyBobSpDCT2D_Type);
+  if (PyModule_AddObject(m, "DCT2D", (PyObject *)&PyBobSpDCT2D_Type) < 0) return 0;
+
+  Py_INCREF(&PyBobSpIDCT2D_Type);
+  if (PyModule_AddObject(m, "IDCT2D", (PyObject *)&PyBobSpIDCT2D_Type) < 0) return 0;
 
   /* imports xbob.blitz C-API + dependencies */
   if (import_xbob_blitz() < 0) return 0;
