@@ -2,7 +2,7 @@
  * @author Andre Anjos <andre.anjos@idiap.ch>
  * @date Fri 25 Oct 16:54:55 2013
  *
- * @brief Bindings to bob::io
+ * @brief Bindings to bob::sp
  */
 
 #ifdef NO_IMPORT_ARRAY
@@ -13,6 +13,8 @@
 
 extern PyTypeObject PyBobSpFFT1D_Type;
 extern PyTypeObject PyBobSpIFFT1D_Type;
+extern PyTypeObject PyBobSpDCT1D_Type;
+extern PyTypeObject PyBobSpIDCT1D_Type;
 
 static PyMethodDef module_methods[] = {
     {0}  /* Sentinel */
@@ -39,6 +41,12 @@ static PyObject* create_module (void) {
   PyBobSpIFFT1D_Type.tp_new = PyType_GenericNew;
   if (PyType_Ready(&PyBobSpIFFT1D_Type) < 0) return 0;
 
+  PyBobSpDCT1D_Type.tp_new = PyType_GenericNew;
+  if (PyType_Ready(&PyBobSpDCT1D_Type) < 0) return 0;
+
+  PyBobSpIDCT1D_Type.tp_new = PyType_GenericNew;
+  if (PyType_Ready(&PyBobSpIDCT1D_Type) < 0) return 0;
+
 # if PY_VERSION_HEX >= 0x03000000
   PyObject* m = PyModule_Create(&module_definition);
 # else
@@ -56,6 +64,12 @@ static PyObject* create_module (void) {
 
   Py_INCREF(&PyBobSpIFFT1D_Type);
   if (PyModule_AddObject(m, "IFFT1D", (PyObject *)&PyBobSpIFFT1D_Type) < 0) return 0;
+
+  Py_INCREF(&PyBobSpDCT1D_Type);
+  if (PyModule_AddObject(m, "DCT1D", (PyObject *)&PyBobSpDCT1D_Type) < 0) return 0;
+
+  Py_INCREF(&PyBobSpIDCT1D_Type);
+  if (PyModule_AddObject(m, "IDCT1D", (PyObject *)&PyBobSpIDCT1D_Type) < 0) return 0;
 
   /* imports xbob.blitz C-API + dependencies */
   if (import_xbob_blitz() < 0) return 0;

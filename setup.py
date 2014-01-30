@@ -39,6 +39,8 @@ setup(
         [
           "xbob/sp/fft1d.cpp",
           "xbob/sp/ifft1d.cpp",
+          "xbob/sp/dct1d.cpp",
+          "xbob/sp/idct1d.cpp",
           "xbob/sp/main.cpp",
           ],
         packages = packages,
