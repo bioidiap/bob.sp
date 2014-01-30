@@ -17,7 +17,7 @@ PyDoc_STRVAR(s_fft1d_doc,
 "IFFT1D(shape) -> new IFFT1D operator\n\
 \n\
 Calculates the direct IFFT of a 1D array/signal. Input and output\n\
-arrays are 1D NumPy array of type ``complex128``.\n\
+arrays are 1D NumPy arrays of type ``complex128``.\n\
 "
 );
 

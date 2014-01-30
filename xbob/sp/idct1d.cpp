@@ -17,7 +17,7 @@ PyDoc_STRVAR(s_fft1d_doc,
 "IDCT1D(shape) -> new IDCT1D operator\n\
 \n\
 Calculates the direct IDCT of a 1D array/signal. Input and output\n\
-arrays are 1D NumPy array of type ``float64``.\n\
+arrays are 1D NumPy arrays of type ``float64``.\n\
 "
 );
 
