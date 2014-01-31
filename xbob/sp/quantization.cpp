@@ -121,9 +121,9 @@ static int PyBobSpQuantization_InitCopy
     self->type_num = copy->type_num;
     switch (self->type_num) {
       case NPY_UINT8:
-        self->cxx.reset(new bob::sp::Quantization<uint8_t>(*reinterpret_cast<bob::sp::Quantization<uint8_t>*>(copy->cxx.get())));
+        self->cxx.reset(new bob::sp::Quantization<uint8_t>(*std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(copy->cxx)));
       case NPY_UINT16:
-        self->cxx.reset(new bob::sp::Quantization<uint16_t>(*reinterpret_cast<bob::sp::Quantization<uint16_t>*>(copy->cxx.get())));
+        self->cxx.reset(new bob::sp::Quantization<uint16_t>(*std::static_pointer_cast<bob::sp::Quantization<uint16_t>>(copy->cxx)));
       default:
         PyErr_Format(PyExc_TypeError, "`%s' only accepts `uint8' or `uint16' as data types (not `%s')", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(copy->type_num));
         return -1;
@@ -330,6 +330,185 @@ static int PyBobSpQuantization_Init(PyBobSpQuantizationObject* self,
 
 }
 
+PyDoc_STRVAR(s_dtype_str, "dtype");
+PyDoc_STRVAR(s_dtype_doc,
+"(numpy.dtype) The data type of arrays that are going to be **input**\n\
+by this functor. Currently supported values are ``uint8`` and\n\
+``uint16``.\n\
+");
+
+static PyObject* PyBobSpQuantization_GetDtype
+(PyBobSpQuantizationObject* self, void* /*closure*/) {
+  PyArray_Descr* retval = PyArray_DescrFromType(self->type_num);
+  if (retval) Py_INCREF(reinterpret_cast<PyObject*>(retval));
+  return reinterpret_cast<PyObject*>(retval);
+}
+
+PyDoc_STRVAR(s_quantization_method_str, "quantization_method");
+PyDoc_STRVAR(s_quantization_method_doc,
+"(str) Possible values of this parameter:\n\
+\n\
+uniform\n\
+  uniform quantization of the input signal within the range\n\
+  between ``min_level`` and ``max_level``\n\
+\n\
+uniform_rounding\n\
+  same as ``uniform`` above, but implemented in a similar way\n\
+  to Matlab quantization\n\
+  (see http://www.mathworks.com/matlabcentral/newsreader/view_thread/275291);\n\
+\n\
+user_spec\n\
+  quantization according to user-specified quantization table\n\
+  of thresholds.\n\
+");
+
+static PyObject* PyBobSpQuantization_GetQuantizationMethod
+(PyBobSpQuantizationObject* self, void* /*closure*/) {
+  bob::sp::quantization::QuantizationType type;
+
+  switch(self->type_num) {
+    case NPY_UINT8:
+      type = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getType();
+    case NPY_UINT16:
+      type = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getType();
+    default:
+      PyErr_Format(PyExc_RuntimeError, "don't know how to cope with `%s' object with dtype == `%s' -- DEBUG ME", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(self->type_num));
+      return 0;
+  }
+
+  switch(type) {
+    case bob::sp::quantization::UNIFORM:
+      return Py_BuildValue("s", "uniform");
+    case bob::sp::quantization::UNIFORM_ROUNDING:
+      return Py_BuildValue("s", "uniform_rounding");
+    case bob::sp::quantization::USER_SPEC:
+      return Py_BuildValue("s", "user_spec");
+    default:
+      PyErr_Format(PyExc_RuntimeError, "don't know how to cope with `%s' object with quantization method == `%d' -- DEBUG ME", Py_TYPE(self)->tp_name, (int)type);
+  }
+
+  return 0;
+}
+
+PyDoc_STRVAR(s_num_levels_str, "num_levels");
+PyDoc_STRVAR(s_num_levels_doc,
+"(int) the number of quantization levels. The default is the total\n\
+number of discrete values permitted by the data type. For example,\n\
+``uint8`` allows for 256 levels.\n\
+");
+
+static PyObject* PyBobSpQuantization_GetNumLevels
+(PyBobSpQuantizationObject* self, void* /*closure*/) {
+
+  Py_ssize_t v;
+
+  switch(self->type_num) {
+    case NPY_UINT8:
+      v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getNumLevels();
+    case NPY_UINT16:
+      v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getNumLevels();
+    default:
+      PyErr_Format(PyExc_RuntimeError, "don't know how to cope with `%s' object with dtype == `%s' -- DEBUG ME", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(self->type_num));
+      return 0;
+  }
+
+  return Py_BuildValue("n", v); 
+
+}
+
+PyDoc_STRVAR(s_min_level_str, "min_level");
+PyDoc_STRVAR(s_min_level_doc,
+"Input values smaller than or equal to this value are\n\
+scaled to this value prior to quantization. As a result, they\n\
+will be scaled in the lowest quantization level. The data type\n\
+of this scalar should be coercible to the datatype of the input.\n\
+");
+
+static PyObject* PyBobSpQuantization_GetMinLevel
+(PyBobSpQuantizationObject* self, void* /*closure*/) {
+  
+  int v;
+
+  switch(self->type_num) {
+    case NPY_UINT8:
+      v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getMinLevel();
+    case NPY_UINT16:
+      v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getMinLevel();
+    default:
+      PyErr_Format(PyExc_RuntimeError, "don't know how to cope with `%s' object with dtype == `%s' -- DEBUG ME", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(self->type_num));
+      return 0;
+  }
+
+  return Py_BuildValue("d", v); 
+
+}
+
+PyDoc_STRVAR(s_max_level_str, "max_level");
+PyDoc_STRVAR(s_max_level_doc,
+"(scalar) Input values higher than this value are scaled to this\n\
+value prior to quantization. As a result, they will be scaled in\n\
+the highest qunatization level. The data type of this scalar\n\
+should be coercible to the datatype of the input.\n\
+");
+
+static PyObject* PyBobSpQuantization_GetMaxLevel
+(PyBobSpQuantizationObject* self, void* /*closure*/) {
+
+  int v;
+
+  switch(self->type_num) {
+    case NPY_UINT8:
+      v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getMaxLevel();
+    case NPY_UINT16:
+      v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getMaxLevel();
+    default:
+      PyErr_Format(PyExc_RuntimeError, "don't know how to cope with `%s' object with dtype == `%s' -- DEBUG ME", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(self->type_num));
+      return 0;
+  }
+
+  return Py_BuildValue("d", v); 
+
+}
+
+static PyGetSetDef PyBobSpQuantization_getseters[] = {
+    {
+      s_dtype_str,
+      (getter)PyBobSpQuantization_GetDtype,
+      0,
+      s_dtype_doc,
+      0
+    },
+    {
+      s_quantization_method_str,
+      (getter)PyBobSpQuantization_GetQuantizationMethod,
+      0,
+      s_quantization_method_doc,
+      0
+    },
+    {
+      s_num_levels_str,
+      (getter)PyBobSpQuantization_GetNumLevels,
+      0,
+      s_num_levels_doc,
+      0
+    },
+    {
+      s_min_level_str,
+      (getter)PyBobSpQuantization_GetMinLevel,
+      0,
+      s_min_level_doc,
+      0
+    },
+    {
+      s_max_level_str,
+      (getter)PyBobSpQuantization_GetMaxLevel,
+      0,
+      s_max_level_doc,
+      0
+    },
+    {0}  /* Sentinel */
+};
+
 PyTypeObject PyBobSpQuantization_Type = {
     PyVarObject_HEAD_INIT(0, 0)
     s_quantization_str,                       /* tp_name */
@@ -360,7 +539,7 @@ PyTypeObject PyBobSpQuantization_Type = {
     0,                                        /* tp_iternext */
     0,                                        /* tp_methods */
     0,                                        /* tp_members */
-    0, //PyBobSpQuantization_getseters,            /* tp_getset */
+    PyBobSpQuantization_getseters,            /* tp_getset */
     0,                                        /* tp_base */
     0,                                        /* tp_dict */
     0,                                        /* tp_descr_get */
