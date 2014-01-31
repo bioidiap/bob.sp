@@ -5,12 +5,10 @@
 #
 # Copyright (C) 2011-2014 Idiap Research Institute, Martigny, Switzerland
 
+# Tests blitz-based Quantization implementation
+
 import numpy
 from . import Quantization
-
-#############################################################################
-# Tests blitz-based Quantization implementation
-#############################################################################
 
 def test_uint8():
 
@@ -24,7 +22,7 @@ def test_uint8():
   
 def test_parameters_uint8():
   
-  quant = Quantization('uint8', "uniform", 4, 64, 192)
+  quant = Quantization('uint8', False, 4, 64, 192)
   assert quant.num_levels == 4
   assert quant.max_level == 192
   assert quant.min_level == 64
@@ -36,7 +34,7 @@ def test_parameters_uint8():
   
 def test_uniform_uint16():
 
-  quant = Quantization('uint16', "uniform", 8)
+  quant = Quantization('uint16', False, 8)
   assert quant.num_levels == 8
   assert quant.max_level == 65535
   assert quant.min_level == 0
@@ -47,7 +45,7 @@ def test_uniform_uint16():
 def test_table_uint8():
   
   quantization_table = numpy.array([50, 100, 150, 200, 250], dtype='uint8')
-  quant = Quantization('uint8', quantization_table = quantization_table)
+  quant = Quantization(quantization_table = quantization_table)
   assert quant.num_levels == 5
   assert quant.max_level == 255
   assert quant.min_level == 50
@@ -57,7 +55,7 @@ def test_table_uint8():
 
 def test_uniform_rounding_uint8():
 
-  quant = Quantization('uint8', 'uniform_rounding', 8)
+  quant = Quantization('uint8', True, 8)
   assert quant.num_levels == 8
   assert quant.max_level == 255
   assert quant.min_level == 0

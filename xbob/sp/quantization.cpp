@@ -12,8 +12,8 @@
 PyDoc_STRVAR(s_quantization_str, XBOB_EXT_MODULE_PREFIX ".Quantization");
 
 PyDoc_STRVAR(s_quantization_doc,
-"Quantization(dtype, [levels=-1, [rounding=False, [min=None, [max=None]]]])\n\
-Quantization(table)\n\
+"Quantization(dtype, [rounding=False, [num_levels=-1, [min_level=None, [max_level=None]]]])\n\
+Quantization(quantization_table)\n\
 Quantization(other)\n\
 \n\
 Functor to quantize 1D or 2D signals into different number of\n\
@@ -23,29 +23,34 @@ will always have a ``uint32`` data type.\n\
 \n\
 Parameters:\n\
 \n\
-levels\n\
-  (int) the number of quantization levels. The default is the total\n\
-  number of discrete values permitted by the data type. For example,\n\
-  ``uint8`` allows for 256 levels.\n\
+dtype\n\
+  (numpy.dtype) The data type of arrays that are going to be **input**\n\
+  by this functor. Currently supported values are ``uint8`` and\n\
+  ``uint16``.\n\
 \n\
 rounding\n\
   (bool) If set to ``True`` (defaults to ``False``), performs\n\
   Matlab-like uniform quantization with rounding (see\n\
   http://www.mathworks.com/matlabcentral/newsreader/view_thread/275291).\n\
 \n\
-min\n\
+num_levels\n\
+  (int) the number of quantization levels. The default is the total\n\
+  number of discrete values permitted by the data type. For example,\n\
+  ``uint8`` allows for 256 levels.\n\
+\n\
+min_level\n\
   (scalar) Input values smaller than or equal to this value are\n\
   scaled to this value prior to quantization. As a result, they\n\
   will be scaled in the lowest quantization level. The data type\n\
   of this scalar should be coercible to the datatype of the input.\n\
 \n\
-max\n\
+max_level\n\
   (scalar) Input values higher than this value are scaled to this\n\
   value prior to quantization. As a result, they will be scaled in\n\
   the highest qunatization level. The data type of this scalar\n\
   should be coercible to the datatype of the input.\n\
 \n\
-table\n\
+quantization_table\n\
   (array) A 1-dimensional array matching the data type of ``input``\n\
   containing user-specified thresholds for the quantization. If\n\
   Each element corresponds to the lower boundary of the particular\n\
@@ -179,23 +184,23 @@ static int PyBobSpQuantization_InitDiscrete(PyBobSpQuantizationObject* self,
   /* Parses input arguments in a single shot */
   static const char* const_kwlist[] = {
     "dtype", 
-    "levels",
     "rounding",
-    "min",
-    "max",
+    "num_levels",
+    "min_level",
+    "max_level",
     0};
   static char** kwlist = const_cast<char**>(const_kwlist);
 
   int type_num = NPY_NOTYPE;
   int* type_num_ptr = &type_num;
-  Py_ssize_t levels = -1;
   PyObject* rounding = 0;
+  Py_ssize_t levels = -1;
   PyObject* min = 0;
   PyObject* max = 0;
-  if (!PyArg_ParseTupleAndKeywords(args, kwds, "O&|nO!OO", kwlist,
+  if (!PyArg_ParseTupleAndKeywords(args, kwds, "O&|O!nOO", kwlist,
         &PyBlitzArray_TypenumConverter, &type_num_ptr,
-        &levels,
         &PyBool_Type, &rounding,
+        &levels,
         &min,
         &max
         )) return -1;
@@ -203,7 +208,11 @@ static int PyBobSpQuantization_InitDiscrete(PyBobSpQuantizationObject* self,
   if (type_num != NPY_UINT8 && type_num != NPY_UINT16) {
   }
 
-  bob::sp::quantization::QuantizationType rounding_enum = PyObject_IsTrue(rounding)?bob::sp::quantization::UNIFORM_ROUNDING:bob::sp::quantization::UNIFORM;
+  bob::sp::quantization::QuantizationType rounding_enum =
+    bob::sp::quantization::UNIFORM;
+  if (rounding) {
+    rounding_enum = PyObject_IsTrue(rounding)?bob::sp::quantization::UNIFORM_ROUNDING:bob::sp::quantization::UNIFORM;
+  }
 
   self->type_num = type_num;
   switch (type_num) {
@@ -222,7 +231,7 @@ static int PyBobSpQuantization_InitTable(PyBobSpQuantizationObject* self,
     PyObject *args, PyObject* kwds) {
 
   /* Parses input arguments in a single shot */
-  static const char* const_kwlist[] = {"table", 0};
+  static const char* const_kwlist[] = {"quantization_table", 0};
   static char** kwlist = const_cast<char**>(const_kwlist);
 
   PyBlitzArrayObject* table = 0;
