@@ -37,6 +37,8 @@ setup(
     ext_modules = [
       Extension("xbob.sp._library",
         [
+          "xbob/sp/quantization.cpp",
+          "xbob/sp/extrapolate.cpp",
           "xbob/sp/fft1d.cpp",
           "xbob/sp/fft2d.cpp",
           "xbob/sp/ifft1d.cpp",

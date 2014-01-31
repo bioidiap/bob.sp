@@ -19,8 +19,30 @@ extern PyTypeObject PyBobSpDCT1D_Type;
 extern PyTypeObject PyBobSpIDCT1D_Type;
 extern PyTypeObject PyBobSpDCT2D_Type;
 extern PyTypeObject PyBobSpIDCT2D_Type;
+extern PyTypeObject PyBobSpExtrapolationBorder_Type;
+extern PyTypeObject PyBobSpQuantization_Type;
+
+PyDoc_STRVAR(s_extrapolate_str, "extrapolate");
+PyDoc_STRVAR(s_extrapolate__doc__,
+"extrapolate(src, dst, [[border=" XBOB_EXT_MODULE_PREFIX ".BorderSize.Zero], value=0.]) -> None\n\
+\n\
+Extrapolates values in the given array using the specified border\n\
+type. Works for 1 or 2D input arrays. The parameter ``value`` is\n\
+only used if the border type is set to\n\
+:py:attr:`" XBOB_EXT_MODULE_PREFIX ".BorderSize.Constant`. It is,\n\
+by default, set to ``0.``, or the equivalent on the datatype passed\n\
+as input. For example, ``False``, if the input is boolean and\n\
+0+0j, if it is complex.\n\
+");
+PyObject* extrapolate(PyObject*, PyObject* args, PyObject* kwds);
 
 static PyMethodDef module_methods[] = {
+    {
+      s_extrapolate_str,
+      (PyCFunction)extrapolate,
+      METH_VARARGS|METH_KEYWORDS,
+      s_extrapolate__doc__
+    },
     {0}  /* Sentinel */
 };
 
@@ -63,6 +85,12 @@ static PyObject* create_module (void) {
   PyBobSpIDCT2D_Type.tp_new = PyType_GenericNew;
   if (PyType_Ready(&PyBobSpIDCT2D_Type) < 0) return 0;
 
+  PyBobSpExtrapolationBorder_Type.tp_new = PyType_GenericNew;
+  if (PyType_Ready(&PyBobSpExtrapolationBorder_Type) < 0) return 0;
+
+  PyBobSpQuantization_Type.tp_new = PyType_GenericNew;
+  if (PyType_Ready(&PyBobSpQuantization_Type) < 0) return 0;
+
 # if PY_VERSION_HEX >= 0x03000000
   PyObject* m = PyModule_Create(&module_definition);
 # else
@@ -98,6 +126,12 @@ static PyObject* create_module (void) {
 
   Py_INCREF(&PyBobSpIDCT2D_Type);
   if (PyModule_AddObject(m, "IDCT2D", (PyObject *)&PyBobSpIDCT2D_Type) < 0) return 0;
+
+  Py_INCREF(&PyBobSpExtrapolationBorder_Type);
+  if (PyModule_AddObject(m, "BorderType", (PyObject *)&PyBobSpExtrapolationBorder_Type) < 0) return 0;
+
+  Py_INCREF(&PyBobSpQuantization_Type);
+  if (PyModule_AddObject(m, "Quantization", (PyObject *)&PyBobSpQuantization_Type) < 0) return 0;
 
   /* imports xbob.blitz C-API + dependencies */
   if (import_xbob_blitz() < 0) return 0;

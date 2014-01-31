@@ -8,7 +8,7 @@
 import os, sys
 import unittest
 import numpy
-from .. import *
+from . import extrapolate_zero, extrapolate_circular, extrapolate_mirror, extrapolate_nearest, extrapolate_constant
 
 #############################################################################
 # Tests blitz-based extrapolation implementation with values returned 
