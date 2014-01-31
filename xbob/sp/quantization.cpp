@@ -344,8 +344,8 @@ static PyObject* PyBobSpQuantization_GetDtype
   return reinterpret_cast<PyObject*>(retval);
 }
 
-PyDoc_STRVAR(s_quantization_method_str, "quantization_method");
-PyDoc_STRVAR(s_quantization_method_doc,
+PyDoc_STRVAR(s_quantization_type_str, "quantization_type");
+PyDoc_STRVAR(s_quantization_type_doc,
 "(str) Possible values of this parameter:\n\
 \n\
 uniform\n\
@@ -362,7 +362,7 @@ user_spec\n\
   of thresholds.\n\
 ");
 
-static PyObject* PyBobSpQuantization_GetQuantizationMethod
+static PyObject* PyBobSpQuantization_GetQuantizationType
 (PyBobSpQuantizationObject* self, void* /*closure*/) {
   bob::sp::quantization::QuantizationType type;
 
@@ -445,7 +445,7 @@ static PyObject* PyBobSpQuantization_GetMinLevel
       return 0;
   }
 
-  return Py_BuildValue("d", v); 
+  return Py_BuildValue("i", v); 
 
 }
 
@@ -474,7 +474,7 @@ static PyObject* PyBobSpQuantization_GetMaxLevel
       return 0;
   }
 
-  return Py_BuildValue("d", v); 
+  return Py_BuildValue("i", v); 
 
 }
 
@@ -487,10 +487,10 @@ static PyGetSetDef PyBobSpQuantization_getseters[] = {
       0
     },
     {
-      s_quantization_method_str,
-      (getter)PyBobSpQuantization_GetQuantizationMethod,
+      s_quantization_type_str,
+      (getter)PyBobSpQuantization_GetQuantizationType,
       0,
-      s_quantization_method_doc,
+      s_quantization_type_doc,
       0
     },
     {
@@ -517,6 +517,118 @@ static PyGetSetDef PyBobSpQuantization_getseters[] = {
     {0}  /* Sentinel */
 };
 
+template <typename T>
+static void call(PyBobSpQuantizationObject* self, 
+    PyBlitzArrayObject* input, PyBlitzArrayObject* output) {
+
+  auto op = std::static_pointer_cast<bob::sp::Quantization<T>>(self->cxx);
+
+  switch(input->ndim) {
+    case 1:
+      op->operator()(*PyBlitzArrayCxx_AsBlitz<T,1>(input),
+          *PyBlitzArrayCxx_AsBlitz<uint32_t,1>(output));
+      break;
+    case 2:
+      op->operator()(*PyBlitzArrayCxx_AsBlitz<T,2>(input),
+          *PyBlitzArrayCxx_AsBlitz<uint32_t,2>(output));
+      break;
+    default:
+      throw std::runtime_error("don't know how to cope with Quantization object with unknown dtype -- DEBUG ME");
+  }
+
+}
+
+static PyObject* PyBobSpQuantization_Call
+(PyBobSpQuantizationObject* self, PyObject* args, PyObject* kwds) {
+
+  static const char* const_kwlist[] = {"input", "output", 0};
+  static char** kwlist = const_cast<char**>(const_kwlist);
+
+  PyBlitzArrayObject* input = 0;
+  PyBlitzArrayObject* output = 0;
+
+  if (!PyArg_ParseTupleAndKeywords(args, kwds, "O&|O&", kwlist,
+        &PyBlitzArray_Converter, &input,
+        &PyBlitzArray_OutputConverter, &output
+        )) return 0;
+
+  //protects acquired resources through this scope
+  auto input_ = make_safe(input);
+  auto output_ = make_xsafe(output);
+
+  if (self->type_num != input->type_num) {
+    PyErr_Format(PyExc_TypeError, "`%s' only supports `%s' arrays for `input', not `%s'", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(self->type_num),
+        PyBlitzArray_TypenumAsString(input->type_num));
+    return 0;
+  }
+
+  if (output && output->type_num != NPY_UINT32) {
+    PyErr_Format(PyExc_TypeError, "`%s' only supports `uint32' arrays for `output', not `%s'", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(output->type_num));
+    return 0;
+  }
+
+  if (input->ndim < 1 || input->ndim > 2) {
+    PyErr_Format(PyExc_TypeError, "`%s' only accepts 1 or 2-dimensional arrays (not %" PY_FORMAT_SIZE_T "dD arrays)", Py_TYPE(self)->tp_name, input->ndim);
+    return 0;
+  }
+
+  if (output && input->ndim != output->ndim) {
+    PyErr_Format(PyExc_RuntimeError, "Input and output arrays should have matching number of dimensions, but input array `input' has %" PY_FORMAT_SIZE_T "d dimensions while output array `output' has %" PY_FORMAT_SIZE_T "d dimensions", input->ndim, output->ndim);
+    return 0;
+  }
+
+  if (input->ndim == 1) {
+    if (output && output->shape[0] != input->shape[0]) {
+      PyErr_Format(PyExc_RuntimeError, "1D `output' array should have %" PY_FORMAT_SIZE_T "d elements matching `%s' input size, not %" PY_FORMAT_SIZE_T "d elements", input->shape[0], Py_TYPE(self)->tp_name, output->shape[0]);
+      return 0;
+    }
+  }
+  else {
+    if (output && output->shape[1] != input->shape[1]) {
+      PyErr_Format(PyExc_RuntimeError, "2D `output' array should have %" PY_FORMAT_SIZE_T "d columns matching input size, not %" PY_FORMAT_SIZE_T "d columns", input->shape[1], output->shape[1]);
+      return 0;
+    }
+    if (output && input->shape[0] != output->shape[0]) {
+      PyErr_Format(PyExc_RuntimeError, "2D `output' array should have %" PY_FORMAT_SIZE_T "d rows matching `input' size, not %" PY_FORMAT_SIZE_T "d rows", input->shape[0], output->shape[0]);
+      return 0;
+    }
+  }
+
+  /** if ``output`` was not pre-allocated, do it now **/
+  if (!output) {
+    output = (PyBlitzArrayObject*)PyBlitzArray_SimpleNew(NPY_UINT32,
+        input->ndim, input->shape);
+    output_ = make_safe(output);
+  }
+
+  /** all basic checks are done, can call the functor now **/
+  try {
+    switch (self->type_num) {
+      case NPY_UINT8:
+        call<uint8_t>(self, input, output);
+        break;
+      case NPY_UINT16:
+        call<uint16_t>(self, input, output);
+        break;
+      default:
+        PyErr_Format(PyExc_RuntimeError, "don't know how to cope with `%s' object with dtype == `%s' -- DEBUG ME", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(self->type_num));
+        return 0;
+    }
+  }
+  catch (std::exception& e) {
+    PyErr_SetString(PyExc_RuntimeError, e.what());
+    return 0;
+  }
+  catch (...) {
+    PyErr_Format(PyExc_RuntimeError, "%s cannot forward data: unknown exception caught", Py_TYPE(self)->tp_name);
+    return 0;
+  }
+
+  Py_INCREF(output);
+  return PyBlitzArray_NUMPY_WRAP(reinterpret_cast<PyObject*>(output));
+
+}
+
 PyTypeObject PyBobSpQuantization_Type = {
     PyVarObject_HEAD_INIT(0, 0)
     s_quantization_str,                       /* tp_name */
@@ -532,7 +644,7 @@ PyTypeObject PyBobSpQuantization_Type = {
     0,                                        /* tp_as_sequence */
     0,                                        /* tp_as_mapping */
     0,                                        /* tp_hash */
-    0,                                        /* tp_call */
+    (ternaryfunc)PyBobSpQuantization_Call,    /* tp_call */
     0,                                        /* tp_str */
     0,                                        /* tp_getattro */
     0,                                        /* tp_setattro */
