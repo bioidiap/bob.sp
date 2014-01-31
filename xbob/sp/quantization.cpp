@@ -369,8 +369,10 @@ static PyObject* PyBobSpQuantization_GetQuantizationMethod
   switch(self->type_num) {
     case NPY_UINT8:
       type = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getType();
+      break;
     case NPY_UINT16:
       type = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getType();
+      break;
     default:
       PyErr_Format(PyExc_RuntimeError, "don't know how to cope with `%s' object with dtype == `%s' -- DEBUG ME", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(self->type_num));
       return 0;
@@ -405,8 +407,10 @@ static PyObject* PyBobSpQuantization_GetNumLevels
   switch(self->type_num) {
     case NPY_UINT8:
       v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getNumLevels();
+      break;
     case NPY_UINT16:
       v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getNumLevels();
+      break;
     default:
       PyErr_Format(PyExc_RuntimeError, "don't know how to cope with `%s' object with dtype == `%s' -- DEBUG ME", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(self->type_num));
       return 0;
@@ -432,8 +436,10 @@ static PyObject* PyBobSpQuantization_GetMinLevel
   switch(self->type_num) {
     case NPY_UINT8:
       v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getMinLevel();
+      break;
     case NPY_UINT16:
       v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getMinLevel();
+      break;
     default:
       PyErr_Format(PyExc_RuntimeError, "don't know how to cope with `%s' object with dtype == `%s' -- DEBUG ME", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(self->type_num));
       return 0;
@@ -459,8 +465,10 @@ static PyObject* PyBobSpQuantization_GetMaxLevel
   switch(self->type_num) {
     case NPY_UINT8:
       v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getMaxLevel();
+      break;
     case NPY_UINT16:
       v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getMaxLevel();
+      break;
     default:
       PyErr_Format(PyExc_RuntimeError, "don't know how to cope with `%s' object with dtype == `%s' -- DEBUG ME", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(self->type_num));
       return 0;
@@ -552,10 +560,6 @@ PyTypeObject PyBobSpQuantization_Type = {
 
 /**
     .add_property("thresholds", &call_get_thresholds<uint8_t>, "1D numpy.ndarray of dtype='int' containing the thresholds of the quantization. Eg. array([ 0,  5, 10]) means quantization in 3 levels. Input values in the range [0,4] will be quantized to level 0, input values in the range[5,9] will be quantized to level 1 and input values in the range [10-max_level] will be quantized to level 2.")
-    .add_property("max_level", &bob::sp::Quantization<uint8_t>::getMaxLevel, "Input values greater then this value are scaled to this value prior to quantization. As a result, they will be quantized in the highest quantization level. The default is the maximum value permitted by the data type of the class.")
-    .add_property("min_level", &bob::sp::Quantization<uint8_t>::getMinLevel, "Input values smaller than or equal to this value are scaled to this value prior to quantization. As a result, they will be scaled in the lowest qunatization level. The default is the minimum value permitted by the data type. ")
-    .add_property("num_levels", &bob::sp::Quantization<uint8_t>::getNumLevels, "Number of quantization levels. The default is the total number of discreet values permitted by the data type of the class.")
-    .add_property("type", &bob::sp::Quantization<uint8_t>::getType, "Type of quantization: 1 - uniform quantization, 2 - uniform quantization with rounding, 3 - quantization by user-specified quantization table. Default is 1.")
     
     .def("__call__", &call_quantization_c<uint8_t>, (arg("self"),arg("input"), arg("output")), "Calls an object of this type to perform quantization for the input signal.")
     
