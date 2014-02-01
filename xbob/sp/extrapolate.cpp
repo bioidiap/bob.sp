@@ -165,12 +165,12 @@ template <typename T> PyObject* inner_extrapolate (PyBlitzArrayObject* src,
     }
   }
   catch (std::exception& e) {
-    PyErr_Format(PyExc_RuntimeError, e.what());
+    PyErr_Format(PyExc_RuntimeError, "%s", e.what());
     return 0;
   }
 
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "caught unknown exception while calling C++ bob::spp::extrapolate");
+    PyErr_SetString(PyExc_RuntimeError, "caught unknown exception while calling C++ bob::spp::extrapolate");
     return 0;
   }
 
