@@ -1,8 +1,21 @@
 /**
+ * @author Ivana Chingovska <ivana.chingovska@idiap.ch>
  * @author Andre Anjos <andre.anjos@idiap.ch>
  * @date Fri 31 Jan 14:26:40 2014
  *
- * @brief Support for quantization
+ * @brief Support for quantization at our signal processing toolbox.
+ *
+ * @todo Use enumerations (see example in "extrapolate.cpp") instead of strings
+ * as return value for `quantization_type'.
+ *
+ * @todo Clean-up: initialization code is pretty tricky. There are different
+ * ways to initialize the functor which are pretty much disjoint. Maybe these
+ * should be different types?
+ *
+ * @todo Extend: quantization class does not support generic input array.
+ * Limited to uint16 and uint8. Output is always in uint32. Ideally, the output
+ * should be dependent on the range the user wants to use. Input should be
+ * arbitrary.
  */
 
 #include <xbob.blitz/cppapi.h>
@@ -478,6 +491,41 @@ static PyObject* PyBobSpQuantization_GetMaxLevel
 
 }
 
+PyDoc_STRVAR(s_quantization_table_str, "quantization_table");
+PyDoc_STRVAR(s_quantization_table_doc,
+"(array) A 1-dimensional array matching the data type of ``input``\n\
+containing user-specified thresholds for the quantization. If\n\
+Each element corresponds to the lower boundary of the particular\n\
+quantization level. Eg. ``array([ 0,  5, 10])`` means quantization\n\
+in 3 levels. Input values in the range :math:`[0,4]` will be quantized\n\
+to level 0, input values in the range :math:`[5,9]` will be\n\
+quantized to level 1 and input values in the range\n\
+:math:`[10-\\text{max}]` will be quantized to level 2.\n\
+");
+
+static PyObject* PyBobSpQuantization_GetQuantizationTable
+(PyBobSpQuantizationObject* self, void* /*closure*/) {
+
+  PyObject* retval;
+
+  switch(self->type_num) {
+    case NPY_UINT8:
+      retval = PyBlitzArrayCxx_NewFromConstArray(std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getThresholds());
+      break;
+    case NPY_UINT16:
+      retval = PyBlitzArrayCxx_NewFromConstArray(std::static_pointer_cast<bob::sp::Quantization<uint16_t>>(self->cxx)->getThresholds());
+      break;
+    default:
+      PyErr_Format(PyExc_RuntimeError, "don't know how to cope with `%s' object with dtype == `%s' -- DEBUG ME", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(self->type_num));
+      return 0;
+  }
+
+  if (!retval) return 0;
+
+  return PyBlitzArray_NUMPY_WRAP(retval);
+
+}
+
 static PyGetSetDef PyBobSpQuantization_getseters[] = {
     {
       s_dtype_str,
@@ -512,6 +560,13 @@ static PyGetSetDef PyBobSpQuantization_getseters[] = {
       (getter)PyBobSpQuantization_GetMaxLevel,
       0,
       s_max_level_doc,
+      0
+    },
+    {
+      s_quantization_table_str,
+      (getter)PyBobSpQuantization_GetQuantizationTable,
+      0,
+      s_quantization_table_doc,
       0
     },
     {0}  /* Sentinel */
@@ -629,6 +684,58 @@ static PyObject* PyBobSpQuantization_Call
 
 }
 
+PyDoc_STRVAR(s_quantization_level_str, "quantization_level");
+PyDoc_STRVAR(s_quantization_level_doc,
+"Calculates the quantization level for a single input value,\n\
+given the current threshold table.\n\
+");
+
+static PyObject* PyBobSpQuantization_QuantizationLevel
+(PyBobSpQuantizationObject* self, PyObject* args, PyObject* kwds) {
+
+  static const char* const_kwlist[] = {"input", 0};
+  static char** kwlist = const_cast<char**>(const_kwlist);
+
+  PyObject* input = 0;
+
+  if (!PyArg_ParseTupleAndKeywords(args, kwds, "O", kwlist, &input)) return 0;
+
+  int output;
+
+  switch (self->type_num) {
+    case NPY_UINT8:
+      {
+        auto c_input = PyBlitzArrayCxx_AsCScalar<uint8_t>(input);
+        if (PyErr_Occurred()) return 0;
+        output = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->quantization_level(c_input);
+      }
+      break;
+    case NPY_UINT16:
+      {
+        auto c_input = PyBlitzArrayCxx_AsCScalar<uint16_t>(input);
+        if (PyErr_Occurred()) return 0;
+        output = std::static_pointer_cast<bob::sp::Quantization<uint16_t>>(self->cxx)->quantization_level(c_input);
+      }
+      break;
+    default:
+      PyErr_Format(PyExc_RuntimeError, "don't know how to cope with `%s' object with dtype == `%s' -- DEBUG ME", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(self->type_num));
+      return 0;
+  }
+
+  return Py_BuildValue("n", output);
+  
+}
+
+static PyMethodDef PyBobSpQuantization_methods[] = {
+  {
+    s_quantization_level_str,
+    (PyCFunction)PyBobSpQuantization_QuantizationLevel,
+    METH_VARARGS|METH_KEYWORDS,
+    s_quantization_level_doc,
+  },
+  {0} /* Sentinel */
+};
+
 PyTypeObject PyBobSpQuantization_Type = {
     PyVarObject_HEAD_INIT(0, 0)
     s_quantization_str,                       /* tp_name */
@@ -657,7 +764,7 @@ PyTypeObject PyBobSpQuantization_Type = {
     0,                                        /* tp_weaklistoffset */
     0,                                        /* tp_iter */
     0,                                        /* tp_iternext */
-    0,                                        /* tp_methods */
+    PyBobSpQuantization_methods,              /* tp_methods */
     0,                                        /* tp_members */
     PyBobSpQuantization_getseters,            /* tp_getset */
     0,                                        /* tp_base */
@@ -669,12 +776,3 @@ PyTypeObject PyBobSpQuantization_Type = {
     0,                                        /* tp_alloc */
     0,                                        /* tp_new */
 };
-
-/**
-    .add_property("thresholds", &call_get_thresholds<uint8_t>, "1D numpy.ndarray of dtype='int' containing the thresholds of the quantization. Eg. array([ 0,  5, 10]) means quantization in 3 levels. Input values in the range [0,4] will be quantized to level 0, input values in the range[5,9] will be quantized to level 1 and input values in the range [10-max_level] will be quantized to level 2.")
-    
-    .def("__call__", &call_quantization_c<uint8_t>, (arg("self"),arg("input"), arg("output")), "Calls an object of this type to perform quantization for the input signal.")
-    
-    .def("quantization_level", &bob::sp::Quantization<uint8_t>::quantization_level, (arg("self"),arg("input")), "Calculates the quantization level for a single input value, given the current thresholds table.")
-    ;
-**/
