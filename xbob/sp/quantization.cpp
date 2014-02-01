@@ -309,16 +309,14 @@ static int PyBobSpQuantization_Init(PyBobSpQuantizationObject* self,
           arg = PyList_GET_ITEM(tmp, 0);
         }
 
-        int type_num = NPY_NOTYPE;
-        int* type_num_ptr = &type_num;
-        if (PyBlitzArray_TypenumConverter(arg, &type_num_ptr)) {
-          return PyBobSpQuantization_InitDiscrete(self, args, kwds);
+        if (PyBlitzArray_Check(arg) || PyArray_Check(arg)) {
+          return PyBobSpQuantization_InitTable(self, args, kwds);
         }
         else if (PyBobSpQuantization_Check(arg)) {
           return PyBobSpQuantization_InitCopy(self, args, kwds);
         }
         else {
-          return PyBobSpQuantization_InitTable(self, args, kwds);
+          return PyBobSpQuantization_InitDiscrete(self, args, kwds);
         }
 
         PyErr_Format(PyExc_TypeError, "cannot initialize `%s' with `%s' (see help)", Py_TYPE(self)->tp_name, Py_TYPE(arg)->tp_name);
