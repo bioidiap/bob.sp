@@ -100,7 +100,7 @@ output\n\
 typedef struct {
   PyObject_HEAD
   int type_num;
-  std::shared_ptr<void> cxx;
+  boost::shared_ptr<void> cxx;
 } PyBobSpQuantizationObject;
 
 extern PyTypeObject PyBobSpQuantization_Type; //forward declaration
@@ -134,9 +134,9 @@ static int PyBobSpQuantization_InitCopy
     self->type_num = copy->type_num;
     switch (self->type_num) {
       case NPY_UINT8:
-        self->cxx.reset(new bob::sp::Quantization<uint8_t>(*std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(copy->cxx)));
+        self->cxx.reset(new bob::sp::Quantization<uint8_t>(*boost::static_pointer_cast<bob::sp::Quantization<uint8_t>>(copy->cxx)));
       case NPY_UINT16:
-        self->cxx.reset(new bob::sp::Quantization<uint16_t>(*std::static_pointer_cast<bob::sp::Quantization<uint16_t>>(copy->cxx)));
+        self->cxx.reset(new bob::sp::Quantization<uint16_t>(*boost::static_pointer_cast<bob::sp::Quantization<uint16_t>>(copy->cxx)));
       default:
         PyErr_Format(PyExc_TypeError, "`%s' only accepts `uint8' or `uint16' as data types (not `%s')", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(copy->type_num));
         return -1;
@@ -379,10 +379,10 @@ static PyObject* PyBobSpQuantization_GetQuantizationType
 
   switch(self->type_num) {
     case NPY_UINT8:
-      type = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getType();
+      type = boost::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getType();
       break;
     case NPY_UINT16:
-      type = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getType();
+      type = boost::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getType();
       break;
     default:
       PyErr_Format(PyExc_RuntimeError, "don't know how to cope with `%s' object with dtype == `%s' -- DEBUG ME", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(self->type_num));
@@ -417,10 +417,10 @@ static PyObject* PyBobSpQuantization_GetNumLevels
 
   switch(self->type_num) {
     case NPY_UINT8:
-      v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getNumLevels();
+      v = boost::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getNumLevels();
       break;
     case NPY_UINT16:
-      v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getNumLevels();
+      v = boost::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getNumLevels();
       break;
     default:
       PyErr_Format(PyExc_RuntimeError, "don't know how to cope with `%s' object with dtype == `%s' -- DEBUG ME", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(self->type_num));
@@ -446,10 +446,10 @@ static PyObject* PyBobSpQuantization_GetMinLevel
 
   switch(self->type_num) {
     case NPY_UINT8:
-      v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getMinLevel();
+      v = boost::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getMinLevel();
       break;
     case NPY_UINT16:
-      v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getMinLevel();
+      v = boost::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getMinLevel();
       break;
     default:
       PyErr_Format(PyExc_RuntimeError, "don't know how to cope with `%s' object with dtype == `%s' -- DEBUG ME", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(self->type_num));
@@ -475,10 +475,10 @@ static PyObject* PyBobSpQuantization_GetMaxLevel
 
   switch(self->type_num) {
     case NPY_UINT8:
-      v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getMaxLevel();
+      v = boost::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getMaxLevel();
       break;
     case NPY_UINT16:
-      v = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getMaxLevel();
+      v = boost::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getMaxLevel();
       break;
     default:
       PyErr_Format(PyExc_RuntimeError, "don't know how to cope with `%s' object with dtype == `%s' -- DEBUG ME", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(self->type_num));
@@ -508,10 +508,10 @@ static PyObject* PyBobSpQuantization_GetQuantizationTable
 
   switch(self->type_num) {
     case NPY_UINT8:
-      retval = PyBlitzArrayCxx_NewFromConstArray(std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getThresholds());
+      retval = PyBlitzArrayCxx_NewFromConstArray(boost::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->getThresholds());
       break;
     case NPY_UINT16:
-      retval = PyBlitzArrayCxx_NewFromConstArray(std::static_pointer_cast<bob::sp::Quantization<uint16_t>>(self->cxx)->getThresholds());
+      retval = PyBlitzArrayCxx_NewFromConstArray(boost::static_pointer_cast<bob::sp::Quantization<uint16_t>>(self->cxx)->getThresholds());
       break;
     default:
       PyErr_Format(PyExc_RuntimeError, "don't know how to cope with `%s' object with dtype == `%s' -- DEBUG ME", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(self->type_num));
@@ -574,7 +574,7 @@ template <typename T>
 static void call(PyBobSpQuantizationObject* self, 
     PyBlitzArrayObject* input, PyBlitzArrayObject* output) {
 
-  auto op = std::static_pointer_cast<bob::sp::Quantization<T>>(self->cxx);
+  auto op = boost::static_pointer_cast<bob::sp::Quantization<T>>(self->cxx);
 
   switch(input->ndim) {
     case 1:
@@ -705,14 +705,14 @@ static PyObject* PyBobSpQuantization_QuantizationLevel
       {
         auto c_input = PyBlitzArrayCxx_AsCScalar<uint8_t>(input);
         if (PyErr_Occurred()) return 0;
-        output = std::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->quantization_level(c_input);
+        output = boost::static_pointer_cast<bob::sp::Quantization<uint8_t>>(self->cxx)->quantization_level(c_input);
       }
       break;
     case NPY_UINT16:
       {
         auto c_input = PyBlitzArrayCxx_AsCScalar<uint16_t>(input);
         if (PyErr_Occurred()) return 0;
-        output = std::static_pointer_cast<bob::sp::Quantization<uint16_t>>(self->cxx)->quantization_level(c_input);
+        output = boost::static_pointer_cast<bob::sp::Quantization<uint16_t>>(self->cxx)->quantization_level(c_input);
       }
       break;
     default:
