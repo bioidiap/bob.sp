@@ -10,8 +10,8 @@
 #include <bob/sp/DCT1D.h>
 #include <bob/sp/DCT2D.h>
 
-static int check_and_allocate(boost::shared_ptr<PyBlitzArrayObject> input,
-    boost::shared_ptr<PyBlitzArrayObject> output) {
+static int check_and_allocate(std::shared_ptr<PyBlitzArrayObject>& input,
+    std::shared_ptr<PyBlitzArrayObject>& output) {
 
   if (input->type_num != NPY_FLOAT64) {
     PyErr_SetString(PyExc_TypeError, "method only supports 64-bit float arrays for input array `input'");
