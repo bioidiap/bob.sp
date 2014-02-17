@@ -11,8 +11,8 @@
 #include <bob/sp/FFT2D.h>
 #include <bob/sp/fftshift.h>
 
-static int check_and_allocate(std::shared_ptr<PyBlitzArrayObject>& input,
-    std::shared_ptr<PyBlitzArrayObject>& output) {
+static int check_and_allocate(boost::shared_ptr<PyBlitzArrayObject>& input,
+    boost::shared_ptr<PyBlitzArrayObject>& output) {
 
   if (input->type_num != NPY_COMPLEX128) {
     PyErr_SetString(PyExc_TypeError, "method only supports 128-bit complex (2x64-bit float) arrays for input array `input'");
