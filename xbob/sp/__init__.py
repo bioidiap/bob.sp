@@ -77,7 +77,7 @@ def extrapolate_constant(src, dst, constant):
     as in ``src``, where the extrapolation results will be placed.
 
   constant
-    (scalar) A scalar with matching type of ``src`` and ``dst``, 
+    (scalar) A scalar with matching type of ``src`` and ``dst``,
     containing the value that will be used to extrapolate ``src`` into
     ``dst``.
 
@@ -106,3 +106,7 @@ def extrapolate_circular(src, dst):
   """
 
   return extrapolate(src, dst, BorderType.Circular)
+
+# gets sphinx autodoc done right - don't remove it
+__all__ = [k for k in dir() if not k.startswith('_')]
+del k
