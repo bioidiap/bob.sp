@@ -108,5 +108,4 @@ def extrapolate_circular(src, dst):
   return extrapolate(src, dst, BorderType.Circular)
 
 # gets sphinx autodoc done right - don't remove it
-__all__ = [k for k in dir() if not k.startswith('_')]
-del k
+__all__ = [_ for _ in dir() if not _.startswith('_')]
