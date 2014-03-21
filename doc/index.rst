@@ -11,8 +11,8 @@
 This module contains base functionality from Bob bound to Python, available in
 the C++ counter-part ``bob::sp``. It includes core signal processing utilities.
 
-User Guide
-----------
+Documentation
+-------------
 
 .. toctree::
    :maxdepth: 2
