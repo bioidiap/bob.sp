@@ -6,12 +6,13 @@
 # Copyright (C) 2011-2013 Idiap Research Institute, Martigny, Switzerland
 
 import os, sys
-import unittest
 import numpy
+import nose.tools
+
 from . import extrapolate_zero, extrapolate_circular, extrapolate_mirror, extrapolate_nearest, extrapolate_constant
 
 #############################################################################
-# Tests blitz-based extrapolation implementation with values returned 
+# Tests blitz-based extrapolation implementation with values returned
 #############################################################################
 
 ########################## Values used for the computation ##################
@@ -98,111 +99,105 @@ A1111_mirror = numpy.array([1,2,2,1,1,2,2,1,1,2,2,
 def compare(v1, v2, width):
   return abs(v1-v2) <= width
 
-def _extrapolate_1D(res, reference, obj):
+def _extrapolate_1D(res, reference):
   # Tests the extrapolation
-  obj.assertEqual(res.shape, reference.shape)
+  nose.tools.eq_(res.shape, reference.shape)
   for i in range(res.shape[0]):
-    obj.assertTrue(compare(res[i], reference[i], eps))
+    assert compare(res[i], reference[i], eps)
 
-def _extrapolate_2D(res, reference, obj):
+def _extrapolate_2D(res, reference):
   # Tests the extrapolation
-  obj.assertEqual(res.shape, reference.shape)
+  nose.tools.eq_(res.shape, reference.shape)
   for i in range(res.shape[0]):
     for j in range(res.shape[1]):
-      obj.assertTrue(compare(res[i,j], reference[i,j], eps))
+      assert compare(res[i,j], reference[i,j], eps)
 
+def test_extrapolation_1D_zeros():
+  b = numpy.zeros((14,), numpy.float64)
+  extrapolate_zero(a5,b)
+  _extrapolate_1D(b,a14_zeros)
 
-##################### Unit Tests ##################  
-class ExtrapolationTest(unittest.TestCase):
-  """Performs extrapolation product"""
+  b = numpy.zeros((26,), numpy.float64)
+  extrapolate_zero(a5,b)
+  _extrapolate_1D(b,a26_zeros)
 
-##################### Convolution Tests ##################  
-  def test_extrapolation_1D_zeros(self):
-    b = numpy.zeros((14,), numpy.float64)
-    extrapolate_zero(a5,b)
-    _extrapolate_1D(b,a14_zeros,self)
+def test_extrapolation_1D_twos():
+  b = numpy.zeros((14,), numpy.float64)
+  extrapolate_constant(a5,b,2.)
+  _extrapolate_1D(b,a14_twos)
 
-    b = numpy.zeros((26,), numpy.float64)
-    extrapolate_zero(a5,b)
-    _extrapolate_1D(b,a26_zeros,self)
+  b = numpy.zeros((26,), numpy.float64)
+  extrapolate_constant(a5,b,2.)
+  _extrapolate_1D(b,a26_twos)
 
-  def test_extrapolation_1D_twos(self):
-    b = numpy.zeros((14,), numpy.float64)
-    extrapolate_constant(a5,b,2.)
-    _extrapolate_1D(b,a14_twos,self)
+def test_extrapolation_1D_nearest():
+  b = numpy.zeros((14,), numpy.float64)
+  extrapolate_nearest(a5,b)
+  _extrapolate_1D(b,a14_nearest)
 
-    b = numpy.zeros((26,), numpy.float64)
-    extrapolate_constant(a5,b,2.)
-    _extrapolate_1D(b,a26_twos,self)
+  b = numpy.zeros((26,), numpy.float64)
+  extrapolate_nearest(a5,b)
+  _extrapolate_1D(b,a26_nearest)
 
-  def test_extrapolation_1D_nearest(self):
-    b = numpy.zeros((14,), numpy.float64)
-    extrapolate_nearest(a5,b)
-    _extrapolate_1D(b,a14_nearest,self)
+def test_extrapolation_1D_circular():
+  b = numpy.zeros((14,), numpy.float64)
+  extrapolate_circular(a5,b)
+  _extrapolate_1D(b,a14_circular)
 
-    b = numpy.zeros((26,), numpy.float64)
-    extrapolate_nearest(a5,b)
-    _extrapolate_1D(b,a26_nearest,self)
+  b = numpy.zeros((26,), numpy.float64)
+  extrapolate_circular(a5,b)
+  _extrapolate_1D(b,a26_circular)
 
-  def test_extrapolation_1D_circular(self):
-    b = numpy.zeros((14,), numpy.float64)
-    extrapolate_circular(a5,b)
-    _extrapolate_1D(b,a14_circular,self)
+def test_extrapolation_1D_mirror():
+  b = numpy.zeros((14,), numpy.float64)
+  extrapolate_mirror(a5,b)
+  _extrapolate_1D(b,a14_mirror)
 
-    b = numpy.zeros((26,), numpy.float64)
-    extrapolate_circular(a5,b)
-    _extrapolate_1D(b,a26_circular,self)
+  b = numpy.zeros((26,), numpy.float64)
+  extrapolate_mirror(a5,b)
+  _extrapolate_1D(b,a26_mirror)
 
-  def test_extrapolation_1D_mirror(self):
-    b = numpy.zeros((14,), numpy.float64)
-    extrapolate_mirror(a5,b)
-    _extrapolate_1D(b,a14_mirror,self)
+def test_extrapolation_2D_zeros():
+  B = numpy.zeros((4,4), numpy.float64)
+  extrapolate_zero(A22,B)
+  _extrapolate_2D(B,A44_zeros)
 
-    b = numpy.zeros((26,), numpy.float64)
-    extrapolate_mirror(a5,b)
-    _extrapolate_1D(b,a26_mirror,self)
+  B = numpy.zeros((11,11), numpy.float64)
+  extrapolate_zero(A22,B)
+  _extrapolate_2D(B,A1111_zeros)
 
-  def test_extrapolation_2D_zeros(self):
-    B = numpy.zeros((4,4), numpy.float64)
-    extrapolate_zero(A22,B)
-    _extrapolate_2D(B,A44_zeros,self)
+def test_extrapolation_2D_twos():
+  B = numpy.zeros((4,4), numpy.float64)
+  extrapolate_constant(A22,B,2.)
+  _extrapolate_2D(B,A44_twos)
 
-    B = numpy.zeros((11,11), numpy.float64)
-    extrapolate_zero(A22,B)
-    _extrapolate_2D(B,A1111_zeros,self)
+  B = numpy.zeros((11,11), numpy.float64)
+  extrapolate_constant(A22,B,2.)
+  _extrapolate_2D(B,A1111_twos)
 
-  def test_extrapolation_2D_twos(self):
-    B = numpy.zeros((4,4), numpy.float64)
-    extrapolate_constant(A22,B,2.)
-    _extrapolate_2D(B,A44_twos,self)
+def test_extrapolation_2D_nearest():
+  B = numpy.zeros((4,4), numpy.float64)
+  extrapolate_nearest(A22,B)
+  _extrapolate_2D(B,A44_nearest)
 
-    B = numpy.zeros((11,11), numpy.float64)
-    extrapolate_constant(A22,B,2.)
-    _extrapolate_2D(B,A1111_twos,self)
+  B = numpy.zeros((11,11), numpy.float64)
+  extrapolate_nearest(A22,B)
+  _extrapolate_2D(B,A1111_nearest)
 
-  def test_extrapolation_2D_nearest(self):
-    B = numpy.zeros((4,4), numpy.float64)
-    extrapolate_nearest(A22,B)
-    _extrapolate_2D(B,A44_nearest,self)
-  
-    B = numpy.zeros((11,11), numpy.float64)
-    extrapolate_nearest(A22,B)
-    _extrapolate_2D(B,A1111_nearest,self)
-  
-  def test_extrapolation_2D_circular(self):
-    B = numpy.zeros((4,4), numpy.float64)
-    extrapolate_circular(A22,B)
-    _extrapolate_2D(B,A44_circular,self)
+def test_extrapolation_2D_circular():
+  B = numpy.zeros((4,4), numpy.float64)
+  extrapolate_circular(A22,B)
+  _extrapolate_2D(B,A44_circular)
 
-    B = numpy.zeros((11,11), numpy.float64)
-    extrapolate_circular(A22,B)
-    _extrapolate_2D(B,A1111_circular,self)
+  B = numpy.zeros((11,11), numpy.float64)
+  extrapolate_circular(A22,B)
+  _extrapolate_2D(B,A1111_circular)
 
-  def test_extrapolation_2D_mirror(self):
-    B = numpy.zeros((4,4), numpy.float64)
-    extrapolate_mirror(A22,B)
-    _extrapolate_2D(B,A44_mirror,self)
+def test_extrapolation_2D_mirror():
+  B = numpy.zeros((4,4), numpy.float64)
+  extrapolate_mirror(A22,B)
+  _extrapolate_2D(B,A44_mirror)
 
-    B = numpy.zeros((11,11), numpy.float64)
-    extrapolate_mirror(A22,B)
-    _extrapolate_2D(B,A1111_mirror,self)
+  B = numpy.zeros((11,11), numpy.float64)
+  extrapolate_mirror(A22,B)
+  _extrapolate_2D(B,A1111_mirror)
