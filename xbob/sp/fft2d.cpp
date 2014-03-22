@@ -178,6 +178,7 @@ static PyObject* PyBobSpFFT2D_GetHeight
   return Py_BuildValue("n", self->cxx->getHeight());
 }
 
+#if BOB_API_VERSION >= 0x0103
 static int PyBobSpFFT2D_SetHeight
 (PyBobSpFFT2DObject* self, PyObject* o, void* /*closure*/) {
 
@@ -204,6 +205,7 @@ static int PyBobSpFFT2D_SetHeight
   return 0;
 
 }
+#endif
 
 PyDoc_STRVAR(s_width_str, "width");
 PyDoc_STRVAR(s_width_doc,
@@ -215,6 +217,7 @@ static PyObject* PyBobSpFFT2D_GetWidth
   return Py_BuildValue("n", self->cxx->getWidth());
 }
 
+#if BOB_API_VERSION >= 0x0103
 static int PyBobSpFFT2D_SetWidth
 (PyBobSpFFT2DObject* self, PyObject* o, void* /*closure*/) {
 
@@ -241,6 +244,7 @@ static int PyBobSpFFT2D_SetWidth
   return 0;
 
 }
+#endif
 
 PyDoc_STRVAR(s_shape_str, "shape");
 PyDoc_STRVAR(s_shape_doc,
@@ -252,6 +256,7 @@ static PyObject* PyBobSpFFT2D_GetShape
   return Py_BuildValue("(nn)", self->cxx->getHeight(), self->cxx->getWidth());
 }
 
+#if BOB_API_VERSION >= 0x0103
 static int PyBobSpFFT2D_SetShape
 (PyBobSpFFT2DObject* self, PyObject* o, void* /*closure*/) {
 
@@ -289,26 +294,39 @@ static int PyBobSpFFT2D_SetShape
   return 0;
 
 }
+#endif
 
 static PyGetSetDef PyBobSpFFT2D_getseters[] = {
     {
       s_height_str,
       (getter)PyBobSpFFT2D_GetHeight,
+#     if BOB_API_VERSION >= 0x0103
       (setter)PyBobSpFFT2D_SetHeight,
+#     else
+      0,
+#     endif
       s_height_doc,
       0
     },
     {
       s_width_str,
       (getter)PyBobSpFFT2D_GetWidth,
+#     if BOB_API_VERSION >= 0x0103
       (setter)PyBobSpFFT2D_SetWidth,
+#     else
+      0,
+#     endif
       s_width_doc,
       0
     },
     {
       s_shape_str,
       (getter)PyBobSpFFT2D_GetShape,
+#     if BOB_API_VERSION >= 0x0103
       (setter)PyBobSpFFT2D_SetShape,
+#     else
+      0,
+#     endif
       s_shape_doc,
       0
     },

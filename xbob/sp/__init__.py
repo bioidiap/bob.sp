@@ -1,5 +1,6 @@
-from ._library import __version__
 from ._library import *
+from . import version
+from .version import module as __version__
 
 def extrapolate_zero(src, dst):
   """Extrapolates the values in ``src`` to ``dst`` with zeros.

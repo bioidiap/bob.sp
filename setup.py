@@ -35,6 +35,13 @@ setup(
       ],
 
     ext_modules = [
+      Extension("xbob.sp.version",
+        [
+          "xbob/sp/version.cpp",
+          ],
+        version = version,
+        packages = packages,
+        ),
       Extension("xbob.sp._library",
         [
           "xbob/sp/quantization.cpp",

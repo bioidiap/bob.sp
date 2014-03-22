@@ -5,11 +5,40 @@
 #
 # Copyright (C) 2011-2014 Idiap Research Institute, Martigny, Switzerland
 
-import os, sys
+import os
+import sys
 import nose.tools
 import numpy
 import random
+
 from . import *
+
+def bob_at_least(version_geq):
+  '''Decorator to check if at least a certain version of Bob is installed
+
+  To use this, decorate your test routine with something like:
+
+  .. code-block:: python
+
+    @bob_at_least('1.2.2')
+
+  '''
+  import functools
+  from distutils.version import StrictVersion
+
+  def test_wrapper(test):
+
+    @functools.wraps(test)
+    def wrapper(*args, **kwargs):
+      from .version import externals
+      inst = StrictVersion(externals['Bob'][0])
+      if inst < version_geq:
+        raise nose.plugins.skip.SkipTest('Bob version installed (%s) is smaller than required for this test (%s)' % (externals['Bob'][0], version_geq))
+      return test(*args, **kwargs)
+
+    return wrapper
+
+  return test_wrapper
 
 #############################################################################
 # Test fast DCT/FFT implementation based on numpy FFT
@@ -24,7 +53,7 @@ def _dct1D(N, t, eps):
   dct = DCT1D(N)
   dct(t,u_dct)
 
-  # process using inverse DCT 
+  # process using inverse DCT
   u_dct_idct = numpy.zeros((N,), 'float64')
   idct = IDCT1D(N)
   idct(u_dct,u_dct_idct)
@@ -44,7 +73,7 @@ def _dct2D(M, N, t, eps):
   dct = DCT2D(M,N)
   dct(t,u_dct)
 
-  # process using inverse DCT 
+  # process using inverse DCT
   u_dct_idct = numpy.zeros((M,N), 'float64')
   idct = IDCT2D(M,N)
   idct(u_dct,u_dct_idct)
@@ -66,7 +95,7 @@ def _fft1D(N, t, eps):
   fft = FFT1D(N)
   fft(t,u_fft)
 
-  # process using inverse FFT 
+  # process using inverse FFT
   u_fft_ifft = numpy.zeros((N,), 'complex128')
   ifft = IFFT1D(N)
   ifft(u_fft,u_fft_ifft)
@@ -86,7 +115,7 @@ def _fft2D(M, N, t, eps):
   fft = FFT2D(M,N)
   fft(t,u_fft)
 
-  # process using inverse FFT 
+  # process using inverse FFT
   u_fft_ifft = numpy.zeros((M,N), 'complex128')
   ifft = IFFT2D(M,N)
   ifft(u_fft,u_fft_ifft)
@@ -102,7 +131,7 @@ def _fft2D(M, N, t, eps):
     for j in range(N):
       assert compare(v_fft_ifft[i,j], t[i,j], 1e-3)
 
-##################### DCT Tests ##################  
+##################### DCT Tests ##################
 def test_dct1D_1to64_set():
   # size of the data
   for N in range(1,65):
@@ -121,7 +150,7 @@ def test_dct1D_range1to2048_random():
     # size of the data
     N = random.randint(1,2048)
 
-    # set up simple 1D random tensor 
+    # set up simple 1D random tensor
     t = numpy.zeros((N,), 'float64')
     for i in range(N):
       t[i] = random.uniform(1, 10)
@@ -152,7 +181,7 @@ def test_dct2D_range1x1to64x64_random():
     M = random.randint(1,64)
     N = random.randint(1,64)
 
-    # set up simple 1D random tensor 
+    # set up simple 1D random tensor
     t = numpy.zeros((M,N), 'float64')
     for i in range(M):
       for j in range(N):
@@ -162,7 +191,7 @@ def test_dct2D_range1x1to64x64_random():
     _dct2D(M, N, t, 1e-3)
 
 
-##################### DFT Tests ##################  
+##################### DFT Tests ##################
 def test_fft1D_1to64_set():
   # size of the data
   for N in range(1,65):
@@ -181,7 +210,7 @@ def test_fft1D_range1to2048_random():
     # size of the data
     N = random.randint(1,2048)
 
-    # set up simple 1D random tensor 
+    # set up simple 1D random tensor
     t = numpy.zeros((N,), 'complex128')
     for i in range(N):
       t[i] = random.uniform(1, 10)
@@ -212,7 +241,7 @@ def test_fft2D_range1x1to64x64_random():
     M = random.randint(1,64)
     N = random.randint(1,64)
 
-    # set up simple 2D random tensor 
+    # set up simple 2D random tensor
     t = numpy.zeros((M,N), 'complex128')
     for i in range(M):
       for j in range(N):
@@ -228,39 +257,39 @@ def test_dct1d_methods():
   o_i = a(r)
   b = DCT1D(7)
   c = DCT1D(a)
-  assert a == b 
-  assert a == c 
-  assert not a != b 
-  assert not a != c 
+  assert a == b
+  assert a == c
+  assert not a != b
+  assert not a != c
   a.length = 8
-  assert not a == b 
-  assert a != b 
+  assert not a == b
+  assert a != b
   a.shape = (7,)
-  assert a == b 
-  assert a == c 
-  assert not a != b 
+  assert a == b
+  assert a == c
+  assert not a != b
   assert a.shape == (7,)
   o_f = a(r)
-  assert numpy.allclose(o_i, o_f) 
+  assert numpy.allclose(o_i, o_f)
   # 1.b IDCT1D
   a = IDCT1D(7)
   o_i = a(r)
   b = IDCT1D(7)
   c = IDCT1D(a)
-  assert a == b 
-  assert a == c 
-  assert not a != b 
-  assert not a != c 
+  assert a == b
+  assert a == c
+  assert not a != b
+  assert not a != c
   a.length = 8
-  assert not a == b 
-  assert a != b 
+  assert not a == b
+  assert a != b
   a.shape = (7,)
-  assert a == b 
-  assert a == c 
-  assert not a != b 
+  assert a == b
+  assert a == c
+  assert not a != b
   assert a.shape == (7,)
   o_f = a(r)
-  assert numpy.allclose(o_i, o_f) 
+  assert numpy.allclose(o_i, o_f)
 
 def test_dct2d_methods():
   r = numpy.random.randn(7,9).astype(numpy.float64)
@@ -269,53 +298,53 @@ def test_dct2d_methods():
   o_i = a(r)
   b = DCT2D(7,9)
   c = DCT2D(a)
-  assert a == b 
-  assert a == c 
-  assert not a != b 
-  assert not a != c 
+  assert a == b
+  assert a == c
+  assert not a != b
+  assert not a != c
   a.height = 8
-  assert not a == b 
-  assert a != b 
+  assert not a == b
+  assert a != b
   a.shape = (7,9)
-  assert a == b 
-  assert a == c 
-  assert not a != b 
+  assert a == b
+  assert a == c
+  assert not a != b
   assert a.shape == (7,9)
   a.width = 10
-  assert not a == b 
-  assert a != b 
+  assert not a == b
+  assert a != b
   a.shape = (7,9)
-  assert a == b 
-  assert a == c 
-  assert not a != b  
+  assert a == b
+  assert a == c
+  assert not a != b
   o_f = a(r)
-  assert numpy.allclose(o_i, o_f) 
+  assert numpy.allclose(o_i, o_f)
   # 2.b IDCT2D
   a = IDCT2D(7,9)
   o_i = a(r)
   b = IDCT2D(7,9)
   c = IDCT2D(a)
-  assert a == b 
-  assert a == c 
-  assert not a != b 
-  assert not a != c 
+  assert a == b
+  assert a == c
+  assert not a != b
+  assert not a != c
   a.height = 8
-  assert not a == b 
-  assert a != b 
+  assert not a == b
+  assert a != b
   a.shape = (7,9)
-  assert a == b 
-  assert a == c 
-  assert not a != b 
+  assert a == b
+  assert a == c
+  assert not a != b
   assert a.shape == (7,9)
   a.width = 10
-  assert not a == b 
-  assert a != b 
+  assert not a == b
+  assert a != b
   a.shape = (7,9)
-  assert a == b 
-  assert a == c 
-  assert not a != b  
+  assert a == b
+  assert a == c
+  assert not a != b
   o_f = a(r)
-  assert numpy.allclose(o_i, o_f) 
+  assert numpy.allclose(o_i, o_f)
 
 def test_fft1d_methods():
   v = numpy.random.randn(7).astype(numpy.complex128)
@@ -324,40 +353,41 @@ def test_fft1d_methods():
   o_i = a(v)
   b = FFT1D(7)
   c = FFT1D(a)
-  assert a == b 
-  assert a == c 
-  assert not a != b 
-  assert not a != c 
+  assert a == b
+  assert a == c
+  assert not a != b
+  assert not a != c
   a.length = 8
-  assert not a == b 
-  assert a != b 
+  assert not a == b
+  assert a != b
   a.shape = (7,)
-  assert a == b 
-  assert a == c 
-  assert not a != b 
+  assert a == b
+  assert a == c
+  assert not a != b
   assert a.shape == (7,)
   o_f = a(v)
-  assert numpy.allclose(o_i, o_f) 
+  assert numpy.allclose(o_i, o_f)
   # 3.b IFFT1D
   a = IFFT1D(7)
   o_i = a(v)
   b = IFFT1D(7)
   c = IFFT1D(a)
-  assert a == b 
-  assert a == c 
-  assert not a != b 
-  assert not a != c 
+  assert a == b
+  assert a == c
+  assert not a != b
+  assert not a != c
   a.length = 8
-  assert not a == b 
-  assert a != b 
+  assert not a == b
+  assert a != b
   a.shape = (7,)
-  assert a == b 
-  assert a == c 
-  assert not a != b 
+  assert a == b
+  assert a == c
+  assert not a != b
   assert a.shape == (7,)
   o_f = a(v)
-  assert numpy.allclose(o_i, o_f) 
-  
+  assert numpy.allclose(o_i, o_f)
+
+@bob_at_least('1.3.0a0')
 def test_fft2d_methods():
   v = numpy.random.randn(7,9).astype(numpy.complex128)
   # 4.a FFT2D
@@ -365,51 +395,51 @@ def test_fft2d_methods():
   o_i = a(v)
   b = FFT2D(7,9)
   c = FFT2D(a)
-  assert a == b 
-  assert a == c 
-  assert not a != b 
-  assert not a != c 
+  assert a == b
+  assert a == c
+  assert not a != b
+  assert not a != c
   a.height = 8
-  assert not a == b 
-  assert a != b 
+  assert not a == b
+  assert a != b
   a.shape = (7,9)
-  assert a == b 
-  assert a == c 
-  assert not a != b 
+  assert a == b
+  assert a == c
+  assert not a != b
   assert a.shape == (7,9)
   a.width = 10
-  assert not a == b 
-  assert a != b 
+  assert not a == b
+  assert a != b
   a.shape = (7,9)
-  assert a == b 
-  assert a == c 
-  assert not a != b  
+  assert a == b
+  assert a == c
+  assert not a != b
   o_f = a(v)
-  assert numpy.allclose(o_i, o_f) 
+  assert numpy.allclose(o_i, o_f)
 
   # 4.b IFFT2D
   a = IFFT2D(7,9)
   o_i = a(v)
   b = IFFT2D(7,9)
   c = IFFT2D(a)
-  assert a == b 
-  assert a == c 
-  assert not a != b 
-  assert not a != c 
+  assert a == b
+  assert a == c
+  assert not a != b
+  assert not a != c
   a.height = 8
-  assert not a == b 
-  assert a != b 
+  assert not a == b
+  assert a != b
   a.shape = (7,9)
-  assert a == b 
-  assert a == c 
-  assert not a != b 
+  assert a == b
+  assert a == c
+  assert not a != b
   assert a.shape == (7,9)
   a.width = 10
-  assert not a == b 
-  assert a != b 
+  assert not a == b
+  assert a != b
   a.shape = (7,9)
-  assert a == b 
-  assert a == c 
-  assert not a != b  
+  assert a == b
+  assert a == c
+  assert not a != b
   o_f = a(v)
-  assert numpy.allclose(o_i, o_f) 
+  assert numpy.allclose(o_i, o_f)
