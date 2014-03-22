@@ -227,8 +227,7 @@ static int PyBobSpFFT2D_SetWidth
   if (PyErr_Occurred()) return -1;
 
   try {
-    size_t slen = len;
-    self->cxx->setWidth(slen);
+    self->cxx->setWidth(len);
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());
