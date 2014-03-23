@@ -78,31 +78,28 @@ static PyObject* bob_version() {
   return Py_BuildValue("sis", BOB_VERSION, BOB_API_VERSION, BOB_PLATFORM);
 }
 
+/**
+ * Xbob.Blitz c/c++ api version
+ */
+static PyObject* xbob_blitz_version() {
+  return Py_BuildValue("{ss}", "api", BOOST_PP_STRINGIZE(XBOB_BLITZ_API_VERSION));
+}
+
 static PyObject* build_version_dictionary() {
 
   PyObject* retval = PyDict_New();
   if (!retval) return 0;
+  auto retval_ = make_safe(retval);
 
-  if (!dict_steal(retval, "Boost", boost_version())) {
-    Py_DECREF(retval);
-    return 0;
-  }
+  if (!dict_set(retval, "Blitz++", BZ_VERSION)) return 0;
+  if (!dict_steal(retval, "Boost", boost_version())) return 0;
+  if (!dict_steal(retval, "Compiler", compiler_version())) return 0;
+  if (!dict_steal(retval, "Python", python_version())) return 0;
+  if (!dict_steal(retval, "NumPy", numpy_version())) return 0;
+  if (!dict_steal(retval, "Xbob.Blitz", xbob_blitz_version())) return 0;
+  if (!dict_steal(retval, "Bob", bob_version())) return 0;
 
-  if (!dict_steal(retval, "Compiler", compiler_version())) {
-    Py_DECREF(retval);
-    return 0;
-  }
-
-  if (!dict_steal(retval, "Python", python_version())) {
-    Py_DECREF(retval);
-    return 0;
-  }
-
-  if (!dict_steal(retval, "Bob", bob_version())) {
-    Py_DECREF(retval);
-    return 0;
-  }
-
+  Py_INCREF(retval);
   return retval;
 }
 
