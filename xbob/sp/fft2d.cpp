@@ -9,6 +9,7 @@
 
 #include <xbob.blitz/cppapi.h>
 #include <xbob.blitz/cleanup.h>
+#include <bob/config.h>
 #include <bob/sp/FFT2D.h>
 
 PyDoc_STRVAR(s_fft2d_str, XBOB_EXT_MODULE_PREFIX ".FFT2D");
