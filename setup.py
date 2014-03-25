@@ -15,7 +15,7 @@ setup(
     name='xbob.sp',
     version=version,
     description='Bindings for Bob\'s signal processing utilities',
-    url='http://github.com/anjos/xbob.sp',
+    url='http://github.com/bioidiap/xbob.sp',
     license='BSD',
     author='Andre Anjos',
     author_email='andre.anjos@idiap.ch',
