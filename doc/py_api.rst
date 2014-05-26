@@ -6,8 +6,8 @@
  Python API
 ============
 
-This section includes information for using the pure Python API of ``xbob.sp``.
+This section includes information for using the pure Python API of ``bob.sp``.
 
 
-.. automodule:: xbob.sp
+.. automodule:: bob.sp
 

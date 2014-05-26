@@ -5,8 +5,8 @@
  * @brief Methods for quick DCT/IDCT calculation
  */
 
-#include <xbob.blitz/cppapi.h>
-#include <xbob.blitz/cleanup.h>
+#include <bob.blitz/cppapi.h>
+#include <bob.blitz/cleanup.h>
 #include <bob/sp/DCT1D.h>
 #include <bob/sp/DCT2D.h>
 

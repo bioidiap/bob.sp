@@ -7,11 +7,11 @@
  * Copyright (C) 2011-2013 Idiap Research Institute, Martigny, Switzerland
  */
 
-#include <xbob.blitz/cppapi.h>
-#include <xbob.blitz/cleanup.h>
+#include <bob.blitz/cppapi.h>
+#include <bob.blitz/cleanup.h>
 #include <bob/sp/FFT1D.h>
 
-PyDoc_STRVAR(s_fft1d_str, XBOB_EXT_MODULE_PREFIX ".FFT1D");
+PyDoc_STRVAR(s_fft1d_str, BOB_EXT_MODULE_PREFIX ".FFT1D");
 
 PyDoc_STRVAR(s_fft1d_doc,
 "FFT1D(shape) -> new FFT1D operator\n\

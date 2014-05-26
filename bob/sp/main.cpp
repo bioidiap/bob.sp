@@ -8,8 +8,8 @@
 #ifdef NO_IMPORT_ARRAY
 #undef NO_IMPORT_ARRAY
 #endif
-#include <xbob.blitz/capi.h>
-#include <xbob.blitz/cleanup.h>
+#include <bob.blitz/capi.h>
+#include <bob.blitz/cleanup.h>
 
 extern PyTypeObject PyBobSpFFT1D_Type;
 extern PyTypeObject PyBobSpIFFT1D_Type;
@@ -24,12 +24,12 @@ extern PyTypeObject PyBobSpQuantization_Type;
 
 PyDoc_STRVAR(s_extrapolate_str, "extrapolate");
 PyDoc_STRVAR(s_extrapolate_doc,
-"extrapolate(src, dst, [[border=" XBOB_EXT_MODULE_PREFIX ".BorderSize.Zero], value=0.]) -> None\n\
+"extrapolate(src, dst, [[border=" BOB_EXT_MODULE_PREFIX ".BorderSize.Zero], value=0.]) -> None\n\
 \n\
 Extrapolates values in the given array using the specified border\n\
 type. Works for 1 or 2D input arrays. The parameter ``value`` is\n\
 only used if the border type is set to\n\
-:py:attr:`" XBOB_EXT_MODULE_PREFIX ".BorderSize.Constant`. It is,\n\
+:py:attr:`" BOB_EXT_MODULE_PREFIX ".BorderSize.Constant`. It is,\n\
 by default, set to ``0.``, or the equivalent on the datatype passed\n\
 as input. For example, ``False``, if the input is boolean and\n\
 0+0j, if it is complex.\n\
@@ -241,7 +241,7 @@ PyDoc_STRVAR(module_docstr, "Bob signal processing toolkit");
 #if PY_VERSION_HEX >= 0x03000000
 static PyModuleDef module_definition = {
   PyModuleDef_HEAD_INIT,
-  XBOB_EXT_MODULE_NAME,
+  BOB_EXT_MODULE_NAME,
   module_docstr,
   -1,
   module_methods,
@@ -284,12 +284,12 @@ static PyObject* create_module (void) {
 # if PY_VERSION_HEX >= 0x03000000
   PyObject* m = PyModule_Create(&module_definition);
 # else
-  PyObject* m = Py_InitModule3(XBOB_EXT_MODULE_NAME, module_methods, module_docstr);
+  PyObject* m = Py_InitModule3(BOB_EXT_MODULE_NAME, module_methods, module_docstr);
 # endif
   if (!m) return 0;
   auto m_ = make_safe(m); ///< protects against early returns
 
-  if (PyModule_AddStringConstant(m, "__version__", XBOB_EXT_MODULE_VERSION) < 0)
+  if (PyModule_AddStringConstant(m, "__version__", BOB_EXT_MODULE_VERSION) < 0)
     return 0;
 
   /* register the types to python */
@@ -323,15 +323,15 @@ static PyObject* create_module (void) {
   Py_INCREF(&PyBobSpQuantization_Type);
   if (PyModule_AddObject(m, "Quantization", (PyObject *)&PyBobSpQuantization_Type) < 0) return 0;
 
-  /* imports xbob.blitz C-API + dependencies */
-  if (import_xbob_blitz() < 0) return 0;
+  /* imports bob.blitz C-API + dependencies */
+  if (import_bob_blitz() < 0) return 0;
 
   Py_INCREF(m);
   return m;
 
 }
 
-PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
+PyMODINIT_FUNC BOB_EXT_ENTRY_NAME (void) {
 # if PY_VERSION_HEX >= 0x03000000
   return
 # endif

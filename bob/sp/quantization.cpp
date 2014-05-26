@@ -18,11 +18,11 @@
  * arbitrary.
  */
 
-#include <xbob.blitz/cppapi.h>
-#include <xbob.blitz/cleanup.h>
+#include <bob.blitz/cppapi.h>
+#include <bob.blitz/cleanup.h>
 #include <bob/sp/Quantization.h>
 
-PyDoc_STRVAR(s_quantization_str, XBOB_EXT_MODULE_PREFIX ".Quantization");
+PyDoc_STRVAR(s_quantization_str, BOB_EXT_MODULE_PREFIX ".Quantization");
 
 PyDoc_STRVAR(s_quantization_doc,
 "Quantization(dtype, [rounding=False, [num_levels=-1, [min_level=None, [max_level=None]]]])\n\

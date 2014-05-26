@@ -5,8 +5,8 @@
  * @brief Methods for quick FFT/IFFT calculation
  */
 
-#include <xbob.blitz/cppapi.h>
-#include <xbob.blitz/cleanup.h>
+#include <bob.blitz/cppapi.h>
+#include <bob.blitz/cleanup.h>
 #include <bob/sp/FFT1D.h>
 #include <bob/sp/FFT2D.h>
 #include <bob/sp/fftshift.h>

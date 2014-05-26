@@ -8,11 +8,11 @@
  * Copyright (C) 2011-2014 Idiap Research Institute, Martigny, Switzerland
  */
 
-#include <xbob.blitz/cppapi.h>
-#include <xbob.blitz/cleanup.h>
+#include <bob.blitz/cppapi.h>
+#include <bob.blitz/cleanup.h>
 #include <bob/sp/extrapolate.h>
 
-PyDoc_STRVAR(s_border_str, XBOB_EXT_MODULE_PREFIX ".BorderType");
+PyDoc_STRVAR(s_border_str, BOB_EXT_MODULE_PREFIX ".BorderType");
 
 PyDoc_STRVAR(s_border_doc,
 "BorderType (C++ enumeration) - cannot be instantiated from Python\n\

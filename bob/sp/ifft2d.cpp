@@ -7,12 +7,12 @@
  * Copyright (C) 2011-2013 Idiap Research Institute, Martigny, Switzerland
  */
 
-#include <xbob.blitz/cppapi.h>
-#include <xbob.blitz/cleanup.h>
+#include <bob.blitz/cppapi.h>
+#include <bob.blitz/cleanup.h>
 #include <bob/config.h>
 #include <bob/sp/FFT2D.h>
 
-PyDoc_STRVAR(s_fft2d_str, XBOB_EXT_MODULE_PREFIX ".IFFT2D");
+PyDoc_STRVAR(s_fft2d_str, BOB_EXT_MODULE_PREFIX ".IFFT2D");
 
 PyDoc_STRVAR(s_fft2d_doc,
 "IFFT2D(shape) -> new IFFT2D operator\n\

@@ -7,43 +7,43 @@
  * Copyright (C) 2011-2013 Idiap Research Institute, Martigny, Switzerland
  */
 
-#include <xbob.blitz/cppapi.h>
-#include <xbob.blitz/cleanup.h>
+#include <bob.blitz/cppapi.h>
+#include <bob.blitz/cleanup.h>
 #include <bob/sp/DCT1D.h>
 
-PyDoc_STRVAR(s_fft1d_str, XBOB_EXT_MODULE_PREFIX ".IDCT1D");
+PyDoc_STRVAR(s_fft1d_str, BOB_EXT_MODULE_PREFIX ".DCT1D");
 
 PyDoc_STRVAR(s_fft1d_doc,
-"IDCT1D(shape) -> new IDCT1D operator\n\
+"DCT1D(shape) -> new DCT1D operator\n\
 \n\
-Calculates the inverse DCT of a 1D array/signal. Input and output\n\
+Calculates the direct DCT of a 1D array/signal. Input and output\n\
 arrays are 1D NumPy arrays of type ``float64``.\n\
 "
 );
 
 /**
- * Represents either an IDCT1D
+ * Represents either an DCT1D
  */
 typedef struct {
   PyObject_HEAD
-  bob::sp::IDCT1D* cxx;
-} PyBobSpIDCT1DObject;
+  bob::sp::DCT1D* cxx;
+} PyBobSpDCT1DObject;
 
-extern PyTypeObject PyBobSpIDCT1D_Type; //forward declaration
+extern PyTypeObject PyBobSpDCT1D_Type; //forward declaration
 
-int PyBobSpIDCT1D_Check(PyObject* o) {
-  return PyObject_IsInstance(o, reinterpret_cast<PyObject*>(&PyBobSpIDCT1D_Type));
+int PyBobSpDCT1D_Check(PyObject* o) {
+  return PyObject_IsInstance(o, reinterpret_cast<PyObject*>(&PyBobSpDCT1D_Type));
 }
 
-static void PyBobSpIDCT1D_Delete (PyBobSpIDCT1DObject* o) {
+static void PyBobSpDCT1D_Delete (PyBobSpDCT1DObject* o) {
 
   delete o->cxx;
   Py_TYPE(o)->tp_free((PyObject*)o);
 
 }
 
-static int PyBobSpIDCT1D_InitCopy
-(PyBobSpIDCT1DObject* self, PyObject* args, PyObject* kwds) {
+static int PyBobSpDCT1D_InitCopy
+(PyBobSpDCT1DObject* self, PyObject* args, PyObject* kwds) {
 
   /* Parses input arguments in a single shot */
   static const char* const_kwlist[] = {"other", 0};
@@ -52,12 +52,12 @@ static int PyBobSpIDCT1D_InitCopy
   PyObject* other = 0;
 
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "O!", kwlist,
-        &PyBobSpIDCT1D_Type, &other)) return -1;
+        &PyBobSpDCT1D_Type, &other)) return -1;
 
-  auto copy = reinterpret_cast<PyBobSpIDCT1DObject*>(other);
+  auto copy = reinterpret_cast<PyBobSpDCT1DObject*>(other);
 
   try {
-    self->cxx = new bob::sp::IDCT1D(*(copy->cxx));
+    self->cxx = new bob::sp::DCT1D(*(copy->cxx));
     if (!self->cxx) {
       PyErr_Format(PyExc_MemoryError, "cannot create new object of type `%s' - no more memory", Py_TYPE(self)->tp_name);
       return -1;
@@ -76,7 +76,7 @@ static int PyBobSpIDCT1D_InitCopy
 
 }
 
-static int PyBobSpIDCT1D_InitShape(PyBobSpIDCT1DObject* self, PyObject *args,
+static int PyBobSpDCT1D_InitShape(PyBobSpDCT1DObject* self, PyObject *args,
     PyObject* kwds) {
 
   /* Parses input arguments in a single shot */
@@ -87,7 +87,7 @@ static int PyBobSpIDCT1D_InitShape(PyBobSpIDCT1DObject* self, PyObject *args,
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "n", kwlist, &length)) return -1;
 
   try {
-    self->cxx = new bob::sp::IDCT1D(length);
+    self->cxx = new bob::sp::DCT1D(length);
     if (!self->cxx) {
       PyErr_Format(PyExc_MemoryError, "cannot create new object of type `%s' - no more memory", Py_TYPE(self)->tp_name);
       return -1;
@@ -106,7 +106,7 @@ static int PyBobSpIDCT1D_InitShape(PyBobSpIDCT1DObject* self, PyObject *args,
 
 }
 
-static int PyBobSpIDCT1D_Init(PyBobSpIDCT1DObject* self,
+static int PyBobSpDCT1D_Init(PyBobSpDCT1DObject* self,
     PyObject* args, PyObject* kwds) {
 
   Py_ssize_t nargs = (args?PyTuple_Size(args):0) + (kwds?PyDict_Size(kwds):0);
@@ -126,11 +126,11 @@ static int PyBobSpIDCT1D_Init(PyBobSpIDCT1DObject* self,
         }
 
         if (PyNumber_Check(arg)) {
-          return PyBobSpIDCT1D_InitShape(self, args, kwds);
+          return PyBobSpDCT1D_InitShape(self, args, kwds);
         }
 
-        if (PyBobSpIDCT1D_Check(arg)) {
-          return PyBobSpIDCT1D_InitCopy(self, args, kwds);
+        if (PyBobSpDCT1D_Check(arg)) {
+          return PyBobSpDCT1D_InitCopy(self, args, kwds);
         }
 
         PyErr_Format(PyExc_TypeError, "cannot initialize `%s' with `%s' (see help)", Py_TYPE(self)->tp_name, Py_TYPE(arg)->tp_name);
@@ -149,7 +149,7 @@ static int PyBobSpIDCT1D_Init(PyBobSpIDCT1DObject* self,
 
 }
 
-static PyObject* PyBobSpIDCT1D_Repr(PyBobSpIDCT1DObject* self) {
+static PyObject* PyBobSpDCT1D_Repr(PyBobSpDCT1DObject* self) {
   return
 # if PY_VERSION_HEX >= 0x03000000
   PyUnicode_FromFormat
@@ -159,16 +159,16 @@ static PyObject* PyBobSpIDCT1D_Repr(PyBobSpIDCT1DObject* self) {
   ("%s(length=%zu)", Py_TYPE(self)->tp_name, self->cxx->getLength());
 }
 
-static PyObject* PyBobSpIDCT1D_RichCompare (PyBobSpIDCT1DObject* self,
+static PyObject* PyBobSpDCT1D_RichCompare (PyBobSpDCT1DObject* self,
     PyObject* other, int op) {
 
-  if (!PyBobSpIDCT1D_Check(other)) {
+  if (!PyBobSpDCT1D_Check(other)) {
     PyErr_Format(PyExc_TypeError, "cannot compare `%s' with `%s'",
         Py_TYPE(self)->tp_name, Py_TYPE(other)->tp_name);
     return 0;
   }
 
-  auto other_ = reinterpret_cast<PyBobSpIDCT1DObject*>(other);
+  auto other_ = reinterpret_cast<PyBobSpDCT1DObject*>(other);
 
   switch (op) {
     case Py_EQ:
@@ -191,13 +191,13 @@ PyDoc_STRVAR(s_length_doc,
 "The length of the output vector\n\
 ");
 
-static PyObject* PyBobSpIDCT1D_GetLength
-(PyBobSpIDCT1DObject* self, void* /*closure*/) {
+static PyObject* PyBobSpDCT1D_GetLength
+(PyBobSpDCT1DObject* self, void* /*closure*/) {
   return Py_BuildValue("n", self->cxx->getLength());
 }
 
-static int PyBobSpIDCT1D_SetLength
-(PyBobSpIDCT1DObject* self, PyObject* o, void* /*closure*/) {
+static int PyBobSpDCT1D_SetLength
+(PyBobSpDCT1DObject* self, PyObject* o, void* /*closure*/) {
 
   if (!PyNumber_Check(o)) {
     PyErr_Format(PyExc_TypeError, "`%s' length can only be set using a number, not `%s'", Py_TYPE(self)->tp_name, Py_TYPE(o)->tp_name);
@@ -228,13 +228,13 @@ PyDoc_STRVAR(s_shape_doc,
 "A tuple that represents the size of the output vector\n\
 ");
 
-static PyObject* PyBobSpIDCT1D_GetShape
-(PyBobSpIDCT1DObject* self, void* /*closure*/) {
+static PyObject* PyBobSpDCT1D_GetShape
+(PyBobSpDCT1DObject* self, void* /*closure*/) {
   return Py_BuildValue("(n)", self->cxx->getLength());
 }
 
-static int PyBobSpIDCT1D_SetShape
-(PyBobSpIDCT1DObject* self, PyObject* o, void* /*closure*/) {
+static int PyBobSpDCT1D_SetShape
+(PyBobSpDCT1DObject* self, PyObject* o, void* /*closure*/) {
 
   if (!PySequence_Check(o)) {
     PyErr_Format(PyExc_TypeError, "`%s' shape can only be set using tuples (or sequences), not `%s'", Py_TYPE(self)->tp_name, Py_TYPE(o)->tp_name);
@@ -268,26 +268,26 @@ static int PyBobSpIDCT1D_SetShape
 
 }
 
-static PyGetSetDef PyBobSpIDCT1D_getseters[] = {
+static PyGetSetDef PyBobSpDCT1D_getseters[] = {
     {
       s_length_str,
-      (getter)PyBobSpIDCT1D_GetLength,
-      (setter)PyBobSpIDCT1D_SetLength,
+      (getter)PyBobSpDCT1D_GetLength,
+      (setter)PyBobSpDCT1D_SetLength,
       s_length_doc,
       0
     },
     {
       s_shape_str,
-      (getter)PyBobSpIDCT1D_GetShape,
-      (setter)PyBobSpIDCT1D_SetShape,
+      (getter)PyBobSpDCT1D_GetShape,
+      (setter)PyBobSpDCT1D_SetShape,
       s_shape_doc,
       0
     },
     {0}  /* Sentinel */
 };
 
-static PyObject* PyBobSpIDCT1D_Call
-(PyBobSpIDCT1DObject* self, PyObject* args, PyObject* kwds) {
+static PyObject* PyBobSpDCT1D_Call
+(PyBobSpDCT1DObject* self, PyObject* args, PyObject* kwds) {
 
   static const char* const_kwlist[] = {"input", "output", 0};
   static char** kwlist = const_cast<char**>(const_kwlist);
@@ -355,23 +355,23 @@ static PyObject* PyBobSpIDCT1D_Call
 
 }
 
-PyTypeObject PyBobSpIDCT1D_Type = {
+PyTypeObject PyBobSpDCT1D_Type = {
     PyVarObject_HEAD_INIT(0, 0)
     s_fft1d_str,                              /*tp_name*/
-    sizeof(PyBobSpIDCT1DObject),              /*tp_basicsize*/
+    sizeof(PyBobSpDCT1DObject),               /*tp_basicsize*/
     0,                                        /*tp_itemsize*/
-    (destructor)PyBobSpIDCT1D_Delete,         /*tp_dealloc*/
+    (destructor)PyBobSpDCT1D_Delete,          /*tp_dealloc*/
     0,                                        /*tp_print*/
     0,                                        /*tp_getattr*/
     0,                                        /*tp_setattr*/
     0,                                        /*tp_compare*/
-    (reprfunc)PyBobSpIDCT1D_Repr,             /*tp_repr*/
+    (reprfunc)PyBobSpDCT1D_Repr,              /*tp_repr*/
     0,                                        /*tp_as_number*/
     0,                                        /*tp_as_sequence*/
     0,                                        /*tp_as_mapping*/
     0,                                        /*tp_hash */
-    (ternaryfunc)PyBobSpIDCT1D_Call,          /* tp_call */
-    (reprfunc)PyBobSpIDCT1D_Repr,             /*tp_str*/
+    (ternaryfunc)PyBobSpDCT1D_Call,           /* tp_call */
+    (reprfunc)PyBobSpDCT1D_Repr,              /*tp_str*/
     0,                                        /*tp_getattro*/
     0,                                        /*tp_setattro*/
     0,                                        /*tp_as_buffer*/
@@ -379,19 +379,19 @@ PyTypeObject PyBobSpIDCT1D_Type = {
     s_fft1d_doc,                              /* tp_doc */
     0,		                                    /* tp_traverse */
     0,		                                    /* tp_clear */
-    (richcmpfunc)PyBobSpIDCT1D_RichCompare,   /* tp_richcompare */
+    (richcmpfunc)PyBobSpDCT1D_RichCompare,    /* tp_richcompare */
     0,		                                    /* tp_weaklistoffset */
     0,		                                    /* tp_iter */
     0,		                                    /* tp_iternext */
     0,                                        /* tp_methods */
     0,                                        /* tp_members */
-    PyBobSpIDCT1D_getseters,                  /* tp_getset */
+    PyBobSpDCT1D_getseters,                   /* tp_getset */
     0,                                        /* tp_base */
     0,                                        /* tp_dict */
     0,                                        /* tp_descr_get */
     0,                                        /* tp_descr_set */
     0,                                        /* tp_dictoffset */
-    (initproc)PyBobSpIDCT1D_Init,             /* tp_init */
+    (initproc)PyBobSpDCT1D_Init,              /* tp_init */
     0,                                        /* tp_alloc */
     0,                                        /* tp_new */
 };

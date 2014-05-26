@@ -4,18 +4,18 @@
 # Thu 30 Jan 08:45:49 2014 CET
 
 from setuptools import setup, find_packages, dist
-dist.Distribution(dict(setup_requires=['xbob.blitz']))
-from xbob.blitz.extension import Extension
+dist.Distribution(dict(setup_requires=['bob.blitz']))
+from bob.blitz.extension import Extension
 
 packages = ['bob-sp >= 1.2.2']
 version = '2.0.0a0'
 
 setup(
 
-    name='xbob.sp',
+    name='bob.sp',
     version=version,
     description='Bindings for Bob\'s signal processing utilities',
-    url='http://github.com/bioidiap/xbob.sp',
+    url='http://github.com/bioidiap/bob.sp',
     license='BSD',
     author='Andre Anjos',
     author_email='andre.anjos@idiap.ch',
@@ -27,36 +27,36 @@ setup(
 
     install_requires=[
       'setuptools',
-      'xbob.blitz',
+      'bob.blitz',
     ],
 
     namespace_packages=[
-      "xbob",
+      "bob",
       ],
 
     ext_modules = [
-      Extension("xbob.sp.version",
+      Extension("bob.sp.version",
         [
-          "xbob/sp/version.cpp",
+          "bob/sp/version.cpp",
           ],
         version = version,
         packages = packages,
         ),
-      Extension("xbob.sp._library",
+      Extension("bob.sp._library",
         [
-          "xbob/sp/quantization.cpp",
-          "xbob/sp/extrapolate.cpp",
-          "xbob/sp/fft1d.cpp",
-          "xbob/sp/fft2d.cpp",
-          "xbob/sp/ifft1d.cpp",
-          "xbob/sp/ifft2d.cpp",
-          "xbob/sp/fft.cpp",
-          "xbob/sp/dct1d.cpp",
-          "xbob/sp/dct2d.cpp",
-          "xbob/sp/idct1d.cpp",
-          "xbob/sp/idct2d.cpp",
-          "xbob/sp/dct.cpp",
-          "xbob/sp/main.cpp",
+          "bob/sp/quantization.cpp",
+          "bob/sp/extrapolate.cpp",
+          "bob/sp/fft1d.cpp",
+          "bob/sp/fft2d.cpp",
+          "bob/sp/ifft1d.cpp",
+          "bob/sp/ifft2d.cpp",
+          "bob/sp/fft.cpp",
+          "bob/sp/dct1d.cpp",
+          "bob/sp/dct2d.cpp",
+          "bob/sp/idct1d.cpp",
+          "bob/sp/idct2d.cpp",
+          "bob/sp/dct.cpp",
+          "bob/sp/main.cpp",
           ],
         packages = packages,
         version = version,
