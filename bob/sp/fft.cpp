@@ -83,7 +83,8 @@ PyObject* fft(PyObject*, PyObject* args, PyObject* kwds) {
   auto input_ = make_safe(input);
   auto output_ = make_xsafe(output);
 
-  check_and_allocate(input_, output_);
+  if (!check_and_allocate(input_, output_))
+    return 0;
 
   output = output_.get();
 
@@ -134,7 +135,8 @@ PyObject* ifft(PyObject*, PyObject* args, PyObject* kwds) {
   auto input_ = make_safe(input);
   auto output_ = make_xsafe(output);
 
-  check_and_allocate(input_, output_);
+  if (!check_and_allocate(input_, output_))
+    return 0;
 
   output = output_.get();
 
@@ -185,7 +187,8 @@ PyObject* fftshift(PyObject*, PyObject* args, PyObject* kwds) {
   auto input_ = make_safe(input);
   auto output_ = make_xsafe(output);
 
-  check_and_allocate(input_, output_);
+  if (!check_and_allocate(input_, output_))
+    return 0;
 
   output = output_.get();
 
@@ -238,7 +241,8 @@ PyObject* ifftshift(PyObject*, PyObject* args, PyObject* kwds) {
   auto input_ = make_safe(input);
   auto output_ = make_xsafe(output);
 
-  check_and_allocate(input_, output_);
+  if (!check_and_allocate(input_, output_))
+    return 0;
 
   output = output_.get();
 
