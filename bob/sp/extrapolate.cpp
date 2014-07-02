@@ -33,7 +33,7 @@ enumeration is available through the attribute ``entries``.\n\
 
 extern PyTypeObject PyBobSpExtrapolationBorder_Type; ///< forward
 
-static int insert_item_string(PyObject* dict, PyObject* entries, 
+static int insert_item_string(PyObject* dict, PyObject* entries,
     const char* key, Py_ssize_t value) {
   auto v = make_safe(Py_BuildValue("n", value));
   if (PyDict_SetItemString(dict, key, v.get()) < 0) return -1;
@@ -49,7 +49,7 @@ static PyObject* create_enumerations() {
   if (!entries) return 0;
   auto entries_ = make_safe(entries);
 
-  if (insert_item_string(retval, entries, "Zero", 
+  if (insert_item_string(retval, entries, "Zero",
         bob::sp::Extrapolation::BorderType::Zero) < 0) return 0;
   if (insert_item_string(retval, entries, "Constant",
         bob::sp::Extrapolation::BorderType::Constant) < 0) return 0;
@@ -59,19 +59,19 @@ static PyObject* create_enumerations() {
         bob::sp::Extrapolation::BorderType::Circular) < 0) return 0;
   if (insert_item_string(retval, entries, "Mirror",
         bob::sp::Extrapolation::BorderType::Mirror) < 0) return 0;
- 
+
   if (PyDict_SetItemString(retval, "entries", entries) < 0) return 0;
 
   Py_INCREF(retval);
   return retval;
 }
 
-static int PyBobSpExtrapolationBorder_Converter(PyObject* o,
+int PyBobSpExtrapolationBorder_Converter(PyObject* o,
     bob::sp::Extrapolation::BorderType* b) {
 
   Py_ssize_t v = PyNumber_AsSsize_t(o, PyExc_OverflowError);
   if (v == -1 && PyErr_Occurred()) return 0;
-  bob::sp::Extrapolation::BorderType value = 
+  bob::sp::Extrapolation::BorderType value =
     (bob::sp::Extrapolation::BorderType)v;
 
   switch (value) {
@@ -85,7 +85,7 @@ static int PyBobSpExtrapolationBorder_Converter(PyObject* o,
     default:
       PyErr_Format(PyExc_ValueError, "border parameter must be set to one of the integer values defined in `%s'", PyBobSpExtrapolationBorder_Type.tp_name);
   }
-  
+
   return 0;
 
 }
