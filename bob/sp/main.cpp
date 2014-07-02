@@ -5,6 +5,11 @@
  * @brief Bindings to bob::sp
  */
 
+#define BOB_SP_MODULE
+#include <bob.sp/api.h>
+
+int PyBobSp_APIVersion = BOB_SP_API_VERSION;
+
 #ifdef NO_IMPORT_ARRAY
 #undef NO_IMPORT_ARRAY
 #endif
@@ -322,6 +327,26 @@ static PyObject* create_module (void) {
 
   Py_INCREF(&PyBobSpQuantization_Type);
   if (PyModule_AddObject(m, "Quantization", (PyObject *)&PyBobSpQuantization_Type) < 0) return 0;
+
+  // initialize the PyBobSp_API
+  initialize_api();
+
+#if PY_VERSION_HEX >= 0x02070000
+
+  /* defines the PyCapsule */
+
+  PyObject* c_api_object = PyCapsule_New((void *)PyBobSp_API, BOB_EXT_MODULE_PREFIX "." BOB_EXT_MODULE_NAME "._C_API", 0);
+
+#else
+
+  PyObject* c_api_object = PyCObject_FromVoidPtr((void *)PyBobSp_API, 0);
+
+#endif
+
+  if (!c_api_object) return 0;
+
+  if (PyModule_AddObject(m, "_C_API", c_api_object) < 0) return 0;
+
 
   /* imports bob.blitz C-API + dependencies */
   if (import_bob_blitz() < 0) return 0;

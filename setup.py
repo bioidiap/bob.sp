@@ -7,6 +7,12 @@ from setuptools import setup, find_packages, dist
 dist.Distribution(dict(setup_requires=['bob.blitz']))
 from bob.blitz.extension import Extension
 
+import os
+package_dir = os.path.dirname(os.path.realpath(__file__))
+package_dir = os.path.join(package_dir, 'bob', 'sp', 'include')
+include_dirs = [package_dir]
+
+
 packages = ['bob-sp >= 1.2.2']
 version = '2.0.0a0'
 
@@ -42,6 +48,7 @@ setup(
           ],
         version = version,
         packages = packages,
+        include_dirs = include_dirs,
         ),
       Extension("bob.sp._library",
         [
@@ -61,6 +68,7 @@ setup(
           ],
         packages = packages,
         version = version,
+        include_dirs = include_dirs,
         ),
       ],
 

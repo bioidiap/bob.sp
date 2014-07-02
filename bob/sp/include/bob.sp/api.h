@@ -17,6 +17,7 @@
 
 #include <bob.sp/config.h>
 #include <bob/config.h>
+#include <bob/sp/extrapolate.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -53,6 +54,16 @@ enum _PyBobSp_ENUM{
   extern PyTypeObject PyBobSpExtrapolationBorder_Type;
   int PyBobSpExtrapolationBorder_Converter PyBobSpExtrapolationBorder_Converter_PROTO;
 
+  // create API
+  void* PyBobSp_API[PyBobSp_API_pointers];
+
+  void initialize_api(){
+    /* exhaustive list of C APIs */
+    PyBobSp_API[PyBobSp_APIVersion_NUM] = (void*)&PyBobSp_APIVersion;
+    PyBobSp_API[PyBobSpExtrapolationBorder_Type_NUM] = (void*)&PyBobSpExtrapolationBorder_Type;
+    PyBobSp_API[PyBobSpExtrapolationBorder_Converter_NUM] = (void*)PyBobSpExtrapolationBorder_Converter;
+  }
+
 #else // BOB_SP_MODULE
 
   /* This section is used in modules that use `bob.sp's' C-API */
@@ -76,8 +87,8 @@ enum _PyBobSp_ENUM{
   /**********************************
    * Bindings for bob.sp.BorderType *
    **********************************/
-# define PyBobSpExtrapolationBorder_Type (*(PyTypeObject *)PyBobIo_API[PyBobSpExtrapolationBorder_Type_NUM])
-# define PyBobSpExtrapolationBorder_Converter (*(int (*)PyBobSpExtrapolationBorder_Converter_PROTO) PyBobIo_API[PyBobSpExtrapolationBorder_Converter_NUM]]
+# define PyBobSpExtrapolationBorder_Type (*(PyTypeObject *)PyBobSp_API[PyBobSpExtrapolationBorder_Type_NUM])
+# define PyBobSpExtrapolationBorder_Converter (*(int (*)PyBobSpExtrapolationBorder_Converter_PROTO) PyBobSp_API[PyBobSpExtrapolationBorder_Converter_NUM]]
 
 # if !defined(NO_IMPORT_ARRAY)
 
@@ -102,18 +113,18 @@ enum _PyBobSp_ENUM{
 
 #   if PY_VERSION_HEX >= 0x02070000
     if (PyCapsule_CheckExact(c_api_object)) {
-      PyBobIo_API = (void **)PyCapsule_GetPointer(c_api_object, PyCapsule_GetName(c_api_object));
+      PyBobSp_API = (void **)PyCapsule_GetPointer(c_api_object, PyCapsule_GetName(c_api_object));
     }
 #   else
     if (PyCObject_Check(c_api_object)) {
-      PyBobIo_API = (void **)PyCObject_AsVoidPtr(c_api_object);
+      PyBobSp_API = (void **)PyCObject_AsVoidPtr(c_api_object);
     }
 #   endif
 
     Py_DECREF(c_api_object);
     Py_DECREF(module);
 
-    if (!PyBobIo_API) {
+    if (!PyBobSp_API) {
       PyErr_SetString(PyExc_ImportError, "cannot find C/C++ API "
 #   if PY_VERSION_HEX >= 0x02070000
           "capsule"
