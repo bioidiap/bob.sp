@@ -88,7 +88,7 @@ enum _PyBobSp_ENUM{
    * Bindings for bob.sp.BorderType *
    **********************************/
 # define PyBobSpExtrapolationBorder_Type (*(PyTypeObject *)PyBobSp_API[PyBobSpExtrapolationBorder_Type_NUM])
-# define PyBobSpExtrapolationBorder_Converter (*(int (*)PyBobSpExtrapolationBorder_Converter_PROTO) PyBobSp_API[PyBobSpExtrapolationBorder_Converter_NUM]]
+# define PyBobSpExtrapolationBorder_Converter (*(int (*)PyBobSpExtrapolationBorder_Converter_PROTO) PyBobSp_API[PyBobSpExtrapolationBorder_Converter_NUM])
 
 # if !defined(NO_IMPORT_ARRAY)
 
