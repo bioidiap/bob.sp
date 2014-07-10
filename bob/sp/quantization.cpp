@@ -196,7 +196,7 @@ static int PyBobSpQuantization_InitDiscrete(PyBobSpQuantizationObject* self,
 
   /* Parses input arguments in a single shot */
   static const char* const_kwlist[] = {
-    "dtype", 
+    "dtype",
     "rounding",
     "num_levels",
     "min_level",
@@ -205,13 +205,12 @@ static int PyBobSpQuantization_InitDiscrete(PyBobSpQuantizationObject* self,
   static char** kwlist = const_cast<char**>(const_kwlist);
 
   int type_num = NPY_NOTYPE;
-  int* type_num_ptr = &type_num;
   PyObject* rounding = 0;
   Py_ssize_t levels = -1;
   PyObject* min = 0;
   PyObject* max = 0;
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "O&|O!nOO", kwlist,
-        &PyBlitzArray_TypenumConverter, &type_num_ptr,
+        &PyBlitzArray_TypenumConverter, &type_num,
         &PyBool_Type, &rounding,
         &levels,
         &min,
@@ -237,7 +236,7 @@ static int PyBobSpQuantization_InitDiscrete(PyBobSpQuantizationObject* self,
       PyErr_Format(PyExc_TypeError, "`%s' only accepts `uint8' or `uint16' as data types (not `%s')", Py_TYPE(self)->tp_name, PyBlitzArray_TypenumAsString(type_num));
   }
 
-  return -1; ///< FAIULRE 
+  return -1; ///< FAIULRE
 }
 
 static int PyBobSpQuantization_InitTable(PyBobSpQuantizationObject* self,
@@ -248,7 +247,7 @@ static int PyBobSpQuantization_InitTable(PyBobSpQuantizationObject* self,
   static char** kwlist = const_cast<char**>(const_kwlist);
 
   PyBlitzArrayObject* table = 0;
-  if (!PyArg_ParseTupleAndKeywords(args, kwds, "O&", kwlist, 
+  if (!PyArg_ParseTupleAndKeywords(args, kwds, "O&", kwlist,
         &PyBlitzArray_Converter, &table)) return -1;
 
   auto table_ = make_safe(table);
@@ -427,7 +426,7 @@ static PyObject* PyBobSpQuantization_GetNumLevels
       return 0;
   }
 
-  return Py_BuildValue("n", v); 
+  return Py_BuildValue("n", v);
 
 }
 
@@ -441,7 +440,7 @@ of this scalar should be coercible to the datatype of the input.\n\
 
 static PyObject* PyBobSpQuantization_GetMinLevel
 (PyBobSpQuantizationObject* self, void* /*closure*/) {
-  
+
   int v;
 
   switch(self->type_num) {
@@ -456,7 +455,7 @@ static PyObject* PyBobSpQuantization_GetMinLevel
       return 0;
   }
 
-  return Py_BuildValue("i", v); 
+  return Py_BuildValue("i", v);
 
 }
 
@@ -485,7 +484,7 @@ static PyObject* PyBobSpQuantization_GetMaxLevel
       return 0;
   }
 
-  return Py_BuildValue("i", v); 
+  return Py_BuildValue("i", v);
 
 }
 
@@ -571,7 +570,7 @@ static PyGetSetDef PyBobSpQuantization_getseters[] = {
 };
 
 template <typename T>
-static void call(PyBobSpQuantizationObject* self, 
+static void call(PyBobSpQuantizationObject* self,
     PyBlitzArrayObject* input, PyBlitzArrayObject* output) {
 
   auto op = boost::static_pointer_cast<bob::sp::Quantization<T>>(self->cxx);
@@ -721,7 +720,7 @@ static PyObject* PyBobSpQuantization_QuantizationLevel
   }
 
   return Py_BuildValue("n", output);
-  
+
 }
 
 static PyMethodDef PyBobSpQuantization_methods[] = {
