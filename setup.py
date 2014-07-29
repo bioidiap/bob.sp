@@ -4,16 +4,16 @@
 # Thu 30 Jan 08:45:49 2014 CET
 
 from setuptools import setup, find_packages, dist
-dist.Distribution(dict(setup_requires=['bob.blitz']))
+dist.Distribution(dict(setup_requires=['bob.blitz', 'bob.core']))
 from bob.blitz.extension import Extension
+import bob.core
 
 import os
 package_dir = os.path.dirname(os.path.realpath(__file__))
 package_dir = os.path.join(package_dir, 'bob', 'sp', 'include')
-include_dirs = [package_dir]
+include_dirs = [package_dir, bob.core.get_include()]
 
-
-packages = ['bob-sp >= 1.2.2']
+packages = ['bob-core >= 1.2.2']
 version = '2.0.0a0'
 
 setup(
@@ -52,6 +52,16 @@ setup(
         ),
       Extension("bob.sp._library",
         [
+          "bob/sp/cpp/DCT1DNaive.cpp",
+          "bob/sp/cpp/DCT2D.cpp",
+          "bob/sp/cpp/DCT2DNaive.cpp",
+          "bob/sp/cpp/FFT1D.cpp",
+          "bob/sp/cpp/FFT2DNaive.cpp",
+          "bob/sp/cpp/DCT1D.cpp",
+          "bob/sp/cpp/FFT1DNaive.cpp",
+          "bob/sp/cpp/FFT2D.cpp",
+          "bob/sp/cpp/fftpack.c",
+
           "bob/sp/quantization.cpp",
           "bob/sp/extrapolate.cpp",
           "bob/sp/fft1d.cpp",
