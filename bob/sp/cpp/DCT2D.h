@@ -29,200 +29,193 @@
 
 
 namespace bob { namespace sp {
-/**
- * @ingroup SP
- * @{
- */
 
-/**
- * @brief This class implements a 2D Discrete Cosine Transform using a
- * 1D DCT implementation.
- */
-class DCT2DAbstract
-{
-  public:
-    /**
-     * @brief Destructor
-     */
-    virtual ~DCT2DAbstract();
+  /**
+   * @brief This class implements a 2D Discrete Cosine Transform using a
+   * 1D DCT implementation.
+   */
+  class DCT2DAbstract
+  {
+    public:
+      /**
+       * @brief Destructor
+       */
+      virtual ~DCT2DAbstract();
 
-    /**
-     * @brief Assignment operator
-     */
-    DCT2DAbstract& operator=(const DCT2DAbstract& other);
+      /**
+       * @brief Assignment operator
+       */
+      DCT2DAbstract& operator=(const DCT2DAbstract& other);
 
-    /**
-     * @brief Equal operator
-     */
-    bool operator==(const DCT2DAbstract& other) const;
+      /**
+       * @brief Equal operator
+       */
+      bool operator==(const DCT2DAbstract& other) const;
 
-    /**
-     * @brief Not equal operator
-     */
-    bool operator!=(const DCT2DAbstract& other) const;
+      /**
+       * @brief Not equal operator
+       */
+      bool operator!=(const DCT2DAbstract& other) const;
 
-    /**
-     * @brief process an array by applying the DCT
-     */
-    virtual void operator()(const blitz::Array<double,2>& src,
-      blitz::Array<double,2>& dst) const;
+      /**
+       * @brief process an array by applying the DCT
+       */
+      virtual void operator()(const blitz::Array<double,2>& src,
+          blitz::Array<double,2>& dst) const;
 
-    /**
-     * @brief Getters
-     */
-    size_t getHeight() const { return m_height; }
-    size_t getWidth() const { return m_width; }
+      /**
+       * @brief Getters
+       */
+      size_t getHeight() const { return m_height; }
+      size_t getWidth() const { return m_width; }
 
-    /**
-     * @brief Setters
-     */
-    virtual void setHeight(const size_t height);
-    virtual void setWidth(const size_t width);
-    virtual void setShape(const size_t height, const size_t width);
+      /**
+       * @brief Setters
+       */
+      virtual void setHeight(const size_t height);
+      virtual void setWidth(const size_t width);
+      virtual void setShape(const size_t height, const size_t width);
 
-  protected:
-    /**
-     * @brief Constructor
-     */
-    DCT2DAbstract();
+    protected:
+      /**
+       * @brief Constructor
+       */
+      DCT2DAbstract();
 
-    /**
-     * @brief Constructor
-     */
-    DCT2DAbstract(const size_t height, const size_t width);
+      /**
+       * @brief Constructor
+       */
+      DCT2DAbstract(const size_t height, const size_t width);
 
-    /**
-     * @brief Copy constructor
-     */
-    DCT2DAbstract(const DCT2DAbstract& other);
+      /**
+       * @brief Copy constructor
+       */
+      DCT2DAbstract(const DCT2DAbstract& other);
 
-    /**
-     * @brief process an array assuming that all the 'check' are done
-     */
-    virtual void processNoCheck(const blitz::Array<double,2>& src,
-      blitz::Array<double,2>& dst) const = 0;
+      /**
+       * @brief process an array assuming that all the 'check' are done
+       */
+      virtual void processNoCheck(const blitz::Array<double,2>& src,
+          blitz::Array<double,2>& dst) const = 0;
 
-    /**
-     * Private attributes
-     */
-    size_t m_height;
-    size_t m_width;
-    mutable blitz::Array<double,2> m_buffer_hw;
-    mutable blitz::Array<double,1> m_buffer_h;
-    mutable blitz::Array<double,1> m_buffer_h2;
-};
+      /**
+       * Private attributes
+       */
+      size_t m_height;
+      size_t m_width;
+      mutable blitz::Array<double,2> m_buffer_hw;
+      mutable blitz::Array<double,1> m_buffer_h;
+      mutable blitz::Array<double,1> m_buffer_h2;
+  };
 
 
-/**
- * @brief This class implements a direct 2D Discrete Cosine Transform using
- * a 1D DCT implementation.
- */
-class DCT2D: public DCT2DAbstract
-{
-  public:
-    /**
-     * @brief Constructor
-     */
-    DCT2D();
+  /**
+   * @brief This class implements a direct 2D Discrete Cosine Transform using
+   * a 1D DCT implementation.
+   */
+  class DCT2D: public DCT2DAbstract
+  {
+    public:
+      /**
+       * @brief Constructor
+       */
+      DCT2D();
 
-    /**
-     * @brief Constructor
-     */
-    DCT2D(const size_t height, const size_t width);
+      /**
+       * @brief Constructor
+       */
+      DCT2D(const size_t height, const size_t width);
 
-    /**
-     * @brief Copy constructor
-     */
-    DCT2D(const DCT2D& other);
+      /**
+       * @brief Copy constructor
+       */
+      DCT2D(const DCT2D& other);
 
-    /**
-     * @brief Destructor
-     */
-    virtual ~DCT2D();
+      /**
+       * @brief Destructor
+       */
+      virtual ~DCT2D();
 
-    /**
-     * @brief Assignment operator
-     */
-    DCT2D& operator=(const DCT2D& other);
+      /**
+       * @brief Assignment operator
+       */
+      DCT2D& operator=(const DCT2D& other);
 
-    /**
-     * @brief Setters
-     */
-    void setHeight(const size_t height);
-    void setWidth(const size_t width);
-    void setShape(const size_t height, const size_t width);
+      /**
+       * @brief Setters
+       */
+      void setHeight(const size_t height);
+      void setWidth(const size_t width);
+      void setShape(const size_t height, const size_t width);
 
-  private:
-    /**
-     * @brief process an array assuming that all the 'check' are done
-     */
-    virtual void processNoCheck(const blitz::Array<double,2>& src,
-      blitz::Array<double,2>& dst) const;
+    private:
+      /**
+       * @brief process an array assuming that all the 'check' are done
+       */
+      virtual void processNoCheck(const blitz::Array<double,2>& src,
+          blitz::Array<double,2>& dst) const;
 
-    /**
-     * @brief DCT1D instances
-     */
-    bob::sp::DCT1D m_dct_h;
-    bob::sp::DCT1D m_dct_w;
-};
+      /**
+       * @brief DCT1D instances
+       */
+      bob::sp::DCT1D m_dct_h;
+      bob::sp::DCT1D m_dct_w;
+  };
 
 
-/**
- * @brief This class implements an inverse 2D Discrete Fourier Transform using
- * a inverse 1D DCT implementation.
- */
-class IDCT2D: public DCT2DAbstract
-{
-  public:
-    /**
-     * @brief Constructor
-     */
-    IDCT2D();
+  /**
+   * @brief This class implements an inverse 2D Discrete Fourier Transform using
+   * a inverse 1D DCT implementation.
+   */
+  class IDCT2D: public DCT2DAbstract
+  {
+    public:
+      /**
+       * @brief Constructor
+       */
+      IDCT2D();
 
-    /**
-     * @brief Constructor
-     */
-    IDCT2D(const size_t height, const size_t width);
+      /**
+       * @brief Constructor
+       */
+      IDCT2D(const size_t height, const size_t width);
 
-    /**
-     * @brief Copy constructor
-     */
-    IDCT2D(const IDCT2D& other);
+      /**
+       * @brief Copy constructor
+       */
+      IDCT2D(const IDCT2D& other);
 
-    /**
-     * @brief Destructor
-     */
-    virtual ~IDCT2D();
+      /**
+       * @brief Destructor
+       */
+      virtual ~IDCT2D();
 
-    /**
-     * @brief Assignment operator
-     */
-    IDCT2D& operator=(const IDCT2D& other);
+      /**
+       * @brief Assignment operator
+       */
+      IDCT2D& operator=(const IDCT2D& other);
 
-    /**
-     * @brief Setters
-     */
-    void setHeight(const size_t height);
-    void setWidth(const size_t width);
-    void setShape(const size_t height, const size_t width);
+      /**
+       * @brief Setters
+       */
+      void setHeight(const size_t height);
+      void setWidth(const size_t width);
+      void setShape(const size_t height, const size_t width);
 
-  private:
-    /**
-     * @brief process an array assuming that all the 'check' are done
-     */
-    virtual void processNoCheck(const blitz::Array<double,2>& src,
-      blitz::Array<double,2>& dst) const;
+    private:
+      /**
+       * @brief process an array assuming that all the 'check' are done
+       */
+      virtual void processNoCheck(const blitz::Array<double,2>& src,
+          blitz::Array<double,2>& dst) const;
 
-    /**
-     * @brief IDCT1D instances
-     */
-    bob::sp::IDCT1D m_idct_h;
-    bob::sp::IDCT1D m_idct_w;
-};
+      /**
+       * @brief IDCT1D instances
+       */
+      bob::sp::IDCT1D m_idct_h;
+      bob::sp::IDCT1D m_idct_w;
+  };
 
-/**
- * @}
- */
 }}
 
 #endif /* BOB_SP_DCT2D_H */

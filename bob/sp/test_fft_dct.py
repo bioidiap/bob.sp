@@ -13,33 +13,6 @@ import random
 
 from . import *
 
-def bob_at_least(version_geq):
-  '''Decorator to check if at least a certain version of Bob is installed
-
-  To use this, decorate your test routine with something like:
-
-  .. code-block:: python
-
-    @bob_at_least('1.2.2')
-
-  '''
-  import functools
-  from distutils.version import StrictVersion
-
-  def test_wrapper(test):
-
-    @functools.wraps(test)
-    def wrapper(*args, **kwargs):
-      from .version import externals
-      inst = StrictVersion(externals['Bob'][0])
-      if inst < version_geq:
-        raise nose.plugins.skip.SkipTest('Bob version installed (%s) is smaller than required for this test (%s)' % (externals['Bob'][0], version_geq))
-      return test(*args, **kwargs)
-
-    return wrapper
-
-  return test_wrapper
-
 #############################################################################
 # Test fast DCT/FFT implementation based on numpy FFT
 #############################################################################
@@ -387,7 +360,6 @@ def test_fft1d_methods():
   o_f = a(v)
   assert numpy.allclose(o_i, o_f)
 
-@bob_at_least('1.3.0a0')
 def test_fft2d_methods():
   v = numpy.random.randn(7,9).astype(numpy.complex128)
   # 4.a FFT2D

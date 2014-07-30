@@ -30,183 +30,176 @@
 
 
 namespace bob { namespace sp {
-/**
- * @ingroup SP
- * @{
- */
 
-/**
- * @brief This class implements a 1D Discrete Fourier Transform based on
- * the NumPY FFT implementation. It is used as a base class for FFT1D and
- * IFFT1D classes.
- */
-class FFT1DAbstract
-{
-  public:
-    /**
-     * @brief Destructor
-     */
-    virtual ~FFT1DAbstract();
+  /**
+   * @brief This class implements a 1D Discrete Fourier Transform based on
+   * the NumPY FFT implementation. It is used as a base class for FFT1D and
+   * IFFT1D classes.
+   */
+  class FFT1DAbstract
+  {
+    public:
+      /**
+       * @brief Destructor
+       */
+      virtual ~FFT1DAbstract();
 
-    /**
-     * @brief Assignment operator
-     */
-    FFT1DAbstract& operator=(const FFT1DAbstract& other);
+      /**
+       * @brief Assignment operator
+       */
+      FFT1DAbstract& operator=(const FFT1DAbstract& other);
 
-    /**
-     * @brief Equal operator
-     */
-    bool operator==(const FFT1DAbstract& other) const;
+      /**
+       * @brief Equal operator
+       */
+      bool operator==(const FFT1DAbstract& other) const;
 
-    /**
-     * @brief Not equal operator
-     */
-    bool operator!=(const FFT1DAbstract& other) const;
+      /**
+       * @brief Not equal operator
+       */
+      bool operator!=(const FFT1DAbstract& other) const;
 
-    /**
-     * @brief process an array by applying the FFT
-     */
-    virtual void operator()(const blitz::Array<std::complex<double>,1>& src,
-      blitz::Array<std::complex<double>,1>& dst) const;
+      /**
+       * @brief process an array by applying the FFT
+       */
+      virtual void operator()(const blitz::Array<std::complex<double>,1>& src,
+          blitz::Array<std::complex<double>,1>& dst) const;
 
-    /**
-     * @brief Getters
-     */
-    size_t getLength() const { return m_length; }
-    /**
-     * @brief Setters
-     */
-    virtual void setLength(const size_t length);
+      /**
+       * @brief Getters
+       */
+      size_t getLength() const { return m_length; }
+      /**
+       * @brief Setters
+       */
+      virtual void setLength(const size_t length);
 
-  protected:
-    /**
-     * @brief Constructor
-     */
-    FFT1DAbstract();
+    protected:
+      /**
+       * @brief Constructor
+       */
+      FFT1DAbstract();
 
-    /**
-     * @brief Constructor
-     */
-    FFT1DAbstract(const size_t length);
+      /**
+       * @brief Constructor
+       */
+      FFT1DAbstract(const size_t length);
 
-    /**
-     * @brief Copy constructor
-     */
-    FFT1DAbstract(const FFT1DAbstract& other);
+      /**
+       * @brief Copy constructor
+       */
+      FFT1DAbstract(const FFT1DAbstract& other);
 
-    /**
-     * @brief process an array assuming that all the 'check' are done
-     */
-    virtual void processNoCheck(const blitz::Array<std::complex<double>,1>& src,
-      blitz::Array<std::complex<double>,1>& dst) const = 0;
-    /**
-     * @brief Initialize working array
-     */
-    virtual void initWorkingArray();
+      /**
+       * @brief process an array assuming that all the 'check' are done
+       */
+      virtual void processNoCheck(const blitz::Array<std::complex<double>,1>& src,
+          blitz::Array<std::complex<double>,1>& dst) const = 0;
+      /**
+       * @brief Initialize working array
+       */
+      virtual void initWorkingArray();
 
-    /**
-     * Private attributes
-     */
-    size_t m_length;
-    blitz::Array<double,1> m_wsave;
-    mutable blitz::Array<double,1> m_buffer;
-};
+      /**
+       * Private attributes
+       */
+      size_t m_length;
+      blitz::Array<double,1> m_wsave;
+      mutable blitz::Array<double,1> m_buffer;
+  };
 
 
-/**
- * @brief This class implements a direct 1D Discrete Fourier Transform
- * based on the NumPy FFT implementation.
- */
-class FFT1D: public FFT1DAbstract
-{
-  public:
-    /**
-     * @brief Constructor
-     */
-    FFT1D();
+  /**
+   * @brief This class implements a direct 1D Discrete Fourier Transform
+   * based on the NumPy FFT implementation.
+   */
+  class FFT1D: public FFT1DAbstract
+  {
+    public:
+      /**
+       * @brief Constructor
+       */
+      FFT1D();
 
-    /**
-     * @brief Constructor
-     */
-    FFT1D(const size_t length);
+      /**
+       * @brief Constructor
+       */
+      FFT1D(const size_t length);
 
-    /**
-     * @brief Copy constructor
-     */
-    FFT1D(const FFT1D& other);
+      /**
+       * @brief Copy constructor
+       */
+      FFT1D(const FFT1D& other);
 
-    /**
-     * @brief Destructor
-     */
-    virtual ~FFT1D();
+      /**
+       * @brief Destructor
+       */
+      virtual ~FFT1D();
 
-    /**
-     * @brief Assignment operator
-     */
-    FFT1D& operator=(const FFT1D& other);
+      /**
+       * @brief Assignment operator
+       */
+      FFT1D& operator=(const FFT1D& other);
 
-    /**
-     * @brief Setters
-     */
-    virtual void setLength(const size_t length);
+      /**
+       * @brief Setters
+       */
+      virtual void setLength(const size_t length);
 
-  private:
-    /**
-     * @brief process an array assuming that all the 'check' are done
-     */
-    virtual void processNoCheck(const blitz::Array<std::complex<double>,1>& src,
-      blitz::Array<std::complex<double>,1>& dst) const;
-};
+    private:
+      /**
+       * @brief process an array assuming that all the 'check' are done
+       */
+      virtual void processNoCheck(const blitz::Array<std::complex<double>,1>& src,
+          blitz::Array<std::complex<double>,1>& dst) const;
+  };
 
 
-/**
- * @brief This class implements a inverse 1D Discrete Fourier Transform
- * based on the NumPy FFT implementation.
- */
-class IFFT1D: public FFT1DAbstract
-{
-  public:
-    /**
-     * @brief Constructor
-     */
-    IFFT1D();
+  /**
+   * @brief This class implements a inverse 1D Discrete Fourier Transform
+   * based on the NumPy FFT implementation.
+   */
+  class IFFT1D: public FFT1DAbstract
+  {
+    public:
+      /**
+       * @brief Constructor
+       */
+      IFFT1D();
 
-    /**
-     * @brief Constructor
-     */
-    IFFT1D(const size_t length);
+      /**
+       * @brief Constructor
+       */
+      IFFT1D(const size_t length);
 
-    /**
-     * @brief Copy constructor
-     */
-    IFFT1D(const IFFT1D& other);
+      /**
+       * @brief Copy constructor
+       */
+      IFFT1D(const IFFT1D& other);
 
-    /**
-     * @brief Destructor
-     */
-    virtual ~IFFT1D();
+      /**
+       * @brief Destructor
+       */
+      virtual ~IFFT1D();
 
-    /**
-     * @brief Assignment operator
-     */
-    IFFT1D& operator=(const IFFT1D& other);
+      /**
+       * @brief Assignment operator
+       */
+      IFFT1D& operator=(const IFFT1D& other);
 
-    /**
-     * @brief Setters
-     */
-    virtual void setLength(const size_t length);
+      /**
+       * @brief Setters
+       */
+      virtual void setLength(const size_t length);
 
-  private:
-    /**
-     * @brief process an array assuming that all the 'check' are done
-     */
-    virtual void processNoCheck(const blitz::Array<std::complex<double>,1>& src,
-      blitz::Array<std::complex<double>,1>& dst) const;
-};
+    private:
+      /**
+       * @brief process an array assuming that all the 'check' are done
+       */
+      virtual void processNoCheck(const blitz::Array<std::complex<double>,1>& src,
+          blitz::Array<std::complex<double>,1>& dst) const;
+  };
 
-/**
- * @}
- */
 }}
 
 #endif /* BOB_SP_FFT1D_H */

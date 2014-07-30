@@ -20,7 +20,7 @@
 
 #include <bob.blitz/cppapi.h>
 #include <bob.blitz/cleanup.h>
-#include <bob/sp/Quantization.h>
+#include <bob.sp/Quantization.h>
 
 PyDoc_STRVAR(s_quantization_str, BOB_EXT_MODULE_PREFIX ".Quantization");
 

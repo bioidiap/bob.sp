@@ -16,8 +16,7 @@
 #include <Python.h>
 
 #include <bob.sp/config.h>
-#include <bob/config.h>
-#include <bob/sp/extrapolate.h>
+#include "extrapolate.h"
 
 #include <boost/shared_ptr.hpp>
 

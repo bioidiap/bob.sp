@@ -7,9 +7,9 @@
 
 #include <bob.blitz/cppapi.h>
 #include <bob.blitz/cleanup.h>
-#include <bob/sp/FFT1D.h>
-#include <bob/sp/FFT2D.h>
-#include <bob/sp/fftshift.h>
+#include "cpp/FFT1D.h"
+#include "cpp/FFT2D.h"
+#include "cpp/fftshift.h"
 
 static int check_and_allocate(boost::shared_ptr<PyBlitzArrayObject>& input,
     boost::shared_ptr<PyBlitzArrayObject>& output) {

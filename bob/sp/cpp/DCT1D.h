@@ -31,212 +31,205 @@
 
 
 namespace bob { namespace sp {
-/**
- * @ingroup SP
- * @{
- */
 
-/**
- * @brief This class implements a 1D Discrete Fourier Transform based on
- * the kiss DCT library. It is used as a base class for DCT1D and
- * IDCT1D classes.
- */
-class DCT1DAbstract
-{
-  public:
-    /**
-     * @brief Destructor
-     */
-    virtual ~DCT1DAbstract();
+  /**
+   * @brief This class implements a 1D Discrete Fourier Transform based on
+   * the kiss DCT library. It is used as a base class for DCT1D and
+   * IDCT1D classes.
+   */
+  class DCT1DAbstract {
 
-    /**
-     * @brief Assignment operator
-     */
-    DCT1DAbstract& operator=(const DCT1DAbstract& other);
+    public:
+      /**
+       * @brief Destructor
+       */
+      virtual ~DCT1DAbstract();
 
-    /**
-     * @brief Equal operator
-     */
-    bool operator==(const DCT1DAbstract& other) const;
+      /**
+       * @brief Assignment operator
+       */
+      DCT1DAbstract& operator=(const DCT1DAbstract& other);
 
-    /**
-     * @brief Not equal operator
-     */
-    bool operator!=(const DCT1DAbstract& other) const;
+      /**
+       * @brief Equal operator
+       */
+      bool operator==(const DCT1DAbstract& other) const;
 
-    /**
-     * @brief process an array by applying the DCT
-     */
-    virtual void operator()(const blitz::Array<double,1>& src,
-      blitz::Array<double,1>& dst) const;
+      /**
+       * @brief Not equal operator
+       */
+      bool operator!=(const DCT1DAbstract& other) const;
 
-    /**
-     * @brief Getters
-     */
-    size_t getLength() const { return m_length; }
-    /**
-     * @brief Setters
-     */
-    virtual void setLength(const size_t length);
+      /**
+       * @brief process an array by applying the DCT
+       */
+      virtual void operator()(const blitz::Array<double,1>& src,
+          blitz::Array<double,1>& dst) const;
 
-  protected:
-    /**
-     * @brief Constructor
-     */
-    DCT1DAbstract();
+      /**
+       * @brief Getters
+       */
+      size_t getLength() const { return m_length; }
+      /**
+       * @brief Setters
+       */
+      virtual void setLength(const size_t length);
 
-    /**
-     * @brief Constructor
-     */
-    DCT1DAbstract(const size_t length);
+    protected:
+      /**
+       * @brief Constructor
+       */
+      DCT1DAbstract();
 
-    /**
-     * @brief Copy constructor
-     */
-    DCT1DAbstract(const DCT1DAbstract& other);
+      /**
+       * @brief Constructor
+       */
+      DCT1DAbstract(const size_t length);
 
-    /**
-     * @brief process an array assuming that all the 'check' are done
-     */
-    virtual void processNoCheck(const blitz::Array<double,1>& src,
-      blitz::Array<double,1>& dst) const = 0;
-    /**
-     * @brief Initialize the normalization factors
-     */
-    virtual void initNormFactors();
-    /**
-     * @brief initializes the working array of exponentials
-     */
-    virtual void initWorkingArray() = 0;
+      /**
+       * @brief Copy constructor
+       */
+      DCT1DAbstract(const DCT1DAbstract& other);
 
-    /**
-     * Private attributes
-     */
-    size_t m_length;
-    double m_sqrt_1byl;
-    double m_sqrt_2byl;
-    blitz::Array<std::complex<double>,1> m_working_array;
-};
+      /**
+       * @brief process an array assuming that all the 'check' are done
+       */
+      virtual void processNoCheck(const blitz::Array<double,1>& src,
+          blitz::Array<double,1>& dst) const = 0;
+      /**
+       * @brief Initialize the normalization factors
+       */
+      virtual void initNormFactors();
+      /**
+       * @brief initializes the working array of exponentials
+       */
+      virtual void initWorkingArray() = 0;
+
+      /**
+       * Private attributes
+       */
+      size_t m_length;
+      double m_sqrt_1byl;
+      double m_sqrt_2byl;
+      blitz::Array<std::complex<double>,1> m_working_array;
+  };
 
 
-/**
- * @brief This class implements a direct 1D Discrete Fourier Transform
- * based on the kiss DCT library
- */
-class DCT1D: public DCT1DAbstract
-{
-  public:
-    /**
-     * @brief Constructor
-     */
-    DCT1D();
+  /**
+   * @brief This class implements a direct 1D Discrete Fourier Transform
+   * based on the kiss DCT library
+   */
+  class DCT1D: public DCT1DAbstract
+  {
+    public:
+      /**
+       * @brief Constructor
+       */
+      DCT1D();
 
-    /**
-     * @brief Constructor
-     */
-    DCT1D(const size_t length);
+      /**
+       * @brief Constructor
+       */
+      DCT1D(const size_t length);
 
-    /**
-     * @brief Copy constructor
-     */
-    DCT1D(const DCT1D& other);
+      /**
+       * @brief Copy constructor
+       */
+      DCT1D(const DCT1D& other);
 
-    /**
-     * @brief Destructor
-     */
-    virtual ~DCT1D();
+      /**
+       * @brief Destructor
+       */
+      virtual ~DCT1D();
 
-    /**
-     * @brief Assignment operator
-     */
-    DCT1D& operator=(const DCT1D& other);
+      /**
+       * @brief Assignment operator
+       */
+      DCT1D& operator=(const DCT1D& other);
 
-    /**
-     * @brief Setters
-     */
-    virtual void setLength(const size_t length);
+      /**
+       * @brief Setters
+       */
+      virtual void setLength(const size_t length);
 
-  private:
-    /**
-     * @brief initializes the working array of exponentials
-     */
-    void initWorkingArray();
+    private:
+      /**
+       * @brief initializes the working array of exponentials
+       */
+      void initWorkingArray();
 
-    /**
-     * @brief process an array assuming that all the 'check' are done
-     */
-    virtual void processNoCheck(const blitz::Array<double,1>& src,
-      blitz::Array<double,1>& dst) const;
+      /**
+       * @brief process an array assuming that all the 'check' are done
+       */
+      virtual void processNoCheck(const blitz::Array<double,1>& src,
+          blitz::Array<double,1>& dst) const;
 
-    /**
-     * Private attributes
-     */
-    bob::sp::FFT1D m_fft;
-    mutable blitz::Array<std::complex<double>,1> m_buffer_1;
-    mutable blitz::Array<std::complex<double>,1> m_buffer_2;
-};
+      /**
+       * Private attributes
+       */
+      bob::sp::FFT1D m_fft;
+      mutable blitz::Array<std::complex<double>,1> m_buffer_1;
+      mutable blitz::Array<std::complex<double>,1> m_buffer_2;
+  };
 
 
-/**
- * @brief This class implements a inverse 1D Discrete Fourier Transform
- * based on the kiss DCT library
- */
-class IDCT1D: public DCT1DAbstract
-{
-  public:
-    /**
-     * @brief Constructor
-     */
-    IDCT1D();
+  /**
+   * @brief This class implements a inverse 1D Discrete Fourier Transform
+   * based on the kiss DCT library
+   */
+  class IDCT1D: public DCT1DAbstract
+  {
+    public:
+      /**
+       * @brief Constructor
+       */
+      IDCT1D();
 
-    /**
-     * @brief Constructor
-     */
-    IDCT1D(const size_t length);
+      /**
+       * @brief Constructor
+       */
+      IDCT1D(const size_t length);
 
-    /**
-     * @brief Copy constructor
-     */
-    IDCT1D(const IDCT1D& other);
+      /**
+       * @brief Copy constructor
+       */
+      IDCT1D(const IDCT1D& other);
 
-    /**
-     * @brief Destructor
-     */
-    virtual ~IDCT1D();
+      /**
+       * @brief Destructor
+       */
+      virtual ~IDCT1D();
 
-    /**
-     * @brief Assignment operator
-     */
-    IDCT1D& operator=(const IDCT1D& other);
+      /**
+       * @brief Assignment operator
+       */
+      IDCT1D& operator=(const IDCT1D& other);
 
-    /**
-     * @brief Setters
-     */
-    virtual void setLength(const size_t length);
+      /**
+       * @brief Setters
+       */
+      virtual void setLength(const size_t length);
 
-  private:
-    /**
-     * @brief initializes the working array of exponentials
-     */
-    void initWorkingArray();
+    private:
+      /**
+       * @brief initializes the working array of exponentials
+       */
+      void initWorkingArray();
 
-    /**
-     * @brief process an array assuming that all the 'check' are done
-     */
-    virtual void processNoCheck(const blitz::Array<double,1>& src,
-      blitz::Array<double,1>& dst) const;
+      /**
+       * @brief process an array assuming that all the 'check' are done
+       */
+      virtual void processNoCheck(const blitz::Array<double,1>& src,
+          blitz::Array<double,1>& dst) const;
 
-    /**
-     * Private attributes
-     */
-    bob::sp::IFFT1D m_ifft;
-    mutable blitz::Array<std::complex<double>,1> m_buffer_1;
-    mutable blitz::Array<std::complex<double>,1> m_buffer_2;
-};
+      /**
+       * Private attributes
+       */
+      bob::sp::IFFT1D m_ifft;
+      mutable blitz::Array<std::complex<double>,1> m_buffer_1;
+      mutable blitz::Array<std::complex<double>,1> m_buffer_2;
+  };
 
-/**
- * @}
- */
 }}
 
 #endif /* BOB_SP_DCT1D_H */

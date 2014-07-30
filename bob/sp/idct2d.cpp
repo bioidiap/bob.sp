@@ -9,7 +9,7 @@
 
 #include <bob.blitz/cppapi.h>
 #include <bob.blitz/cleanup.h>
-#include <bob/sp/DCT2D.h>
+#include "cpp/DCT2D.h"
 
 PyDoc_STRVAR(s_fft2d_str, BOB_EXT_MODULE_PREFIX ".IDCT2D");
 
