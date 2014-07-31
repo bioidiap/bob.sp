@@ -13,7 +13,6 @@ package_dir = os.path.dirname(os.path.realpath(__file__))
 package_dir = os.path.join(package_dir, 'bob', 'sp', 'include')
 include_dirs = [package_dir, bob.core.get_include()]
 
-packages = ['bob-core >= 1.2.2']
 version = '2.0.0a0'
 
 setup(
@@ -47,7 +46,6 @@ setup(
           "bob/sp/version.cpp",
           ],
         version = version,
-        packages = packages,
         include_dirs = include_dirs,
         ),
       Extension("bob.sp._library",
@@ -76,7 +74,6 @@ setup(
           "bob/sp/dct.cpp",
           "bob/sp/main.cpp",
           ],
-        packages = packages,
         version = version,
         include_dirs = include_dirs,
         ),
