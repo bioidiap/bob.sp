@@ -13,7 +13,7 @@
 
 #include <bob.core/assert.h>
 #include <bob.core/array_copy.h>
-#include <bob/core/cast.h>
+#include <bob.core/cast.h>
 
 bob::sp::DCT1DAbstract::DCT1DAbstract():
   m_length(1), m_working_array(1)
@@ -245,11 +245,11 @@ void bob::sp::IDCT1D::processNoCheck(const blitz::Array<double,1>& src,
   m_buffer_2 = 2*blitz::real(m_buffer_2);
   // 4. Take the output:
   for(int i=0; i<(int)(m_length/2); ++i) {
-    dst(2*i) = bob::core::cast<double>(m_buffer_2(i));
-    dst(2*i+1) = bob::core::cast<double>(m_buffer_2(m_length-1-i));
+    dst(2*i) = bob::core::array::scalar_cast<double>(m_buffer_2(i));
+    dst(2*i+1) = bob::core::array::scalar_cast<double>(m_buffer_2(m_length-1-i));
   }
   if ((m_length % 2) == 1)
-    dst(m_length-1) = bob::core::cast<double>(m_buffer_2(m_length/2));
+    dst(m_length-1) = bob::core::array::scalar_cast<double>(m_buffer_2(m_length/2));
 }
 
 void bob::sp::IDCT1D::initWorkingArray()
