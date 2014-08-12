@@ -7,7 +7,7 @@
  * Copyright (C) Idiap Research Institute, Martigny, Switzerland
  */
 
-#include "DCT2DNaive.h"
+#include <bob.sp/DCT2DNaive.h>
 #include <bob.core/assert.h>
 
 bob::sp::detail::DCT2DNaiveAbstract::DCT2DNaiveAbstract(

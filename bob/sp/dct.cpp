@@ -7,8 +7,8 @@
 
 #include <bob.blitz/cppapi.h>
 #include <bob.blitz/cleanup.h>
-#include "cpp/DCT1D.h"
-#include "cpp/DCT2D.h"
+#include <bob.sp/DCT1D.h>
+#include <bob.sp/DCT2D.h>
 
 static int check_and_allocate(boost::shared_ptr<PyBlitzArrayObject>& input,
     boost::shared_ptr<PyBlitzArrayObject>& output) {

@@ -7,7 +7,7 @@
  * Copyright (C) Idiap Research Institute, Martigny, Switzerland
  */
 
-#include "FFT2DNaive.h"
+#include <bob.sp/FFT2DNaive.h>
 #include <bob.core/assert.h>
 
 bob::sp::detail::FFT2DNaiveAbstract::FFT2DNaiveAbstract(

@@ -9,7 +9,7 @@
 
 #include <bob.blitz/cppapi.h>
 #include <bob.blitz/cleanup.h>
-#include "cpp/FFT2D.h"
+#include <bob.sp/FFT2D.h>
 
 PyDoc_STRVAR(s_fft2d_str, BOB_EXT_MODULE_PREFIX ".FFT2D");
 

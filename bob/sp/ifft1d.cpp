@@ -9,7 +9,7 @@
 
 #include <bob.blitz/cppapi.h>
 #include <bob.blitz/cleanup.h>
-#include "cpp/FFT1D.h"
+#include <bob.sp/FFT1D.h>
 
 PyDoc_STRVAR(s_fft1d_str, BOB_EXT_MODULE_PREFIX ".IFFT1D");
 

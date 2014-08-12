@@ -8,7 +8,7 @@
  * Copyright (C) Idiap Research Institute, Martigny, Switzerland
  */
 
-#include "DCT2D.h"
+#include <bob.sp/DCT2D.h>
 #include <bob.core/assert.h>
 
 bob::sp::DCT2DAbstract::DCT2DAbstract():

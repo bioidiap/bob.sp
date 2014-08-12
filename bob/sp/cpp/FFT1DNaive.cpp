@@ -7,7 +7,7 @@
  * Copyright (C) Idiap Research Institute, Martigny, Switzerland
  */
 
-#include "FFT1DNaive.h"
+#include <bob.sp/FFT1DNaive.h>
 #include <bob.core/assert.h>
 
 bob::sp::detail::FFT1DNaiveAbstract::FFT1DNaiveAbstract(const size_t length):

@@ -5,13 +5,11 @@
 
 from setuptools import setup, find_packages, dist
 dist.Distribution(dict(setup_requires=['bob.blitz', 'bob.core']))
-from bob.blitz.extension import Extension
-import bob.core
+from bob.blitz.extension import Extension, Library, build_ext
 
 import os
 package_dir = os.path.dirname(os.path.realpath(__file__))
-package_dir = os.path.join(package_dir, 'bob', 'sp', 'include')
-include_dirs = [package_dir, bob.core.get_include()]
+target_dir = os.path.join(package_dir, 'bob', 'sp')
 
 version = '2.0.0a0'
 
@@ -46,9 +44,10 @@ setup(
           "bob/sp/version.cpp",
           ],
         version = version,
-        include_dirs = include_dirs,
+        bob_packages = ['bob.core'],
         ),
-      Extension("bob.sp._library",
+
+      Library('bob_sp',
         [
           "bob/sp/cpp/DCT1DNaive.cpp",
           "bob/sp/cpp/DCT2D.cpp",
@@ -58,8 +57,16 @@ setup(
           "bob/sp/cpp/DCT1D.cpp",
           "bob/sp/cpp/FFT1DNaive.cpp",
           "bob/sp/cpp/FFT2D.cpp",
-          "bob/sp/cpp/fftpack.c",
+          "bob/sp/cpp/fftpack.c"
+        ],
+        package_directory = package_dir,
+        target_directory = target_dir,
+        version = version,
+        bob_packages = ['bob.core'],
+      ),
 
+      Extension("bob.sp._library",
+        [
           "bob/sp/quantization.cpp",
           "bob/sp/extrapolate.cpp",
           "bob/sp/fft1d.cpp",
@@ -75,9 +82,14 @@ setup(
           "bob/sp/main.cpp",
           ],
         version = version,
-        include_dirs = include_dirs,
+        bob_packages = ['bob.core'],
+        libraries = ['bob_sp'],
         ),
       ],
+
+    cmdclass = {
+      'build_ext': build_ext
+    },
 
     classifiers = [
       'Development Status :: 3 - Alpha',

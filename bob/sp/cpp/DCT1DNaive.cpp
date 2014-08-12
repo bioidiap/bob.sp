@@ -7,7 +7,7 @@
  * Copyright (C) Idiap Research Institute, Martigny, Switzerland
  */
 
-#include "DCT1DNaive.h"
+#include <bob.sp/DCT1DNaive.h>
 #include <bob.core/assert.h>
 
 bob::sp::detail::DCT1DNaiveAbstract::DCT1DNaiveAbstract(const size_t length):

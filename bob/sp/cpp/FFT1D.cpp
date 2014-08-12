@@ -7,7 +7,7 @@
  * Copyright (C) Idiap Research Institute, Martigny, Switzerland
  */
 
-#include "FFT1D.h"
+#include <bob.sp/FFT1D.h>
 #include <bob.core/assert.h>
 #include <bob.core/array_copy.h>
 

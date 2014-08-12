@@ -7,7 +7,7 @@
  * Copyright (C) Idiap Research Institute, Martigny, Switzerland
  */
 
-#include "FFT2D.h"
+#include <bob.sp/FFT2D.h>
 #include <bob.core/assert.h>
 
 bob::sp::FFT2DAbstract::FFT2DAbstract():

@@ -7,7 +7,7 @@
  * Copyright (C) Idiap Research Institute, Martigny, Switzerland
  */
 
-#include "DCT1D.h"
+#include <bob.sp/DCT1D.h>
 #include <cmath>
 #include <boost/math/constants/constants.hpp>
 
