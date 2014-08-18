@@ -7,10 +7,6 @@ from setuptools import setup, find_packages, dist
 dist.Distribution(dict(setup_requires=['bob.blitz', 'bob.core']))
 from bob.blitz.extension import Extension, Library, build_ext
 
-import os
-package_dir = os.path.dirname(os.path.realpath(__file__))
-target_dir = os.path.join(package_dir, 'bob', 'sp')
-
 version = '2.0.0a0'
 
 setup(
@@ -32,6 +28,7 @@ setup(
     install_requires=[
       'setuptools',
       'bob.blitz',
+      'bob.core'
     ],
 
     namespace_packages=[
@@ -47,7 +44,7 @@ setup(
         bob_packages = ['bob.core'],
         ),
 
-      Library('bob_sp',
+      Library('bob.sp.bob_sp',
         [
           "bob/sp/cpp/DCT1DNaive.cpp",
           "bob/sp/cpp/DCT2D.cpp",
@@ -59,8 +56,6 @@ setup(
           "bob/sp/cpp/FFT2D.cpp",
           "bob/sp/cpp/fftpack.c"
         ],
-        package_directory = package_dir,
-        target_directory = target_dir,
         version = version,
         bob_packages = ['bob.core'],
       ),
@@ -83,7 +78,6 @@ setup(
           ],
         version = version,
         bob_packages = ['bob.core'],
-        libraries = ['bob_sp'],
         ),
       ],
 
