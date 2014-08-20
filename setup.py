@@ -3,8 +3,10 @@
 # Andre Anjos <andre.anjos@idiap.ch>
 # Thu 30 Jan 08:45:49 2014 CET
 
+bob_packages = ['bob.core']
+
 from setuptools import setup, find_packages, dist
-dist.Distribution(dict(setup_requires=['bob.blitz', 'bob.core']))
+dist.Distribution(dict(setup_requires=['bob.blitz'] + bob_packages))
 from bob.blitz.extension import Extension, Library, build_ext
 
 version = '2.0.0a0'
@@ -28,12 +30,12 @@ setup(
     install_requires=[
       'setuptools',
       'bob.blitz',
-      'bob.core'
+      'bob.core',
     ],
 
     namespace_packages=[
       "bob",
-      ],
+    ],
 
     ext_modules = [
       Extension("bob.sp.version",
@@ -41,7 +43,7 @@ setup(
           "bob/sp/version.cpp",
           ],
         version = version,
-        bob_packages = ['bob.core'],
+        bob_packages = bob_packages,
         ),
 
       Library('bob.sp.bob_sp',
@@ -57,7 +59,7 @@ setup(
           "bob/sp/cpp/fftpack.c"
         ],
         version = version,
-        bob_packages = ['bob.core'],
+        bob_packages = bob_packages,
       ),
 
       Extension("bob.sp._library",
@@ -77,7 +79,7 @@ setup(
           "bob/sp/main.cpp",
           ],
         version = version,
-        bob_packages = ['bob.core'],
+        bob_packages = bob_packages,
         ),
       ],
 
