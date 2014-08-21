@@ -36,9 +36,6 @@ Here is a dummy C example showing how to include the header and where to call th
 
    }
 
-.. note::
-
-  The include directory can be discovered using :py:func:`bob.sp.get_include`.
 
 BorderType Interface
 --------------------
