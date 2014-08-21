@@ -41,10 +41,10 @@ setup(
       Extension("bob.sp.version",
         [
           "bob/sp/version.cpp",
-          ],
+        ],
         version = version,
         bob_packages = bob_packages,
-        ),
+      ),
 
       Library('bob.sp.bob_sp',
         [
@@ -77,11 +77,11 @@ setup(
           "bob/sp/idct2d.cpp",
           "bob/sp/dct.cpp",
           "bob/sp/main.cpp",
-          ],
+        ],
         version = version,
         bob_packages = bob_packages,
-        ),
-      ],
+      ),
+    ],
 
     cmdclass = {
       'build_ext': build_ext
@@ -95,6 +95,6 @@ setup(
       'Programming Language :: Python',
       'Programming Language :: Python :: 3',
       'Topic :: Software Development :: Libraries :: Python Modules',
-      ],
+    ],
 
-    )
+  )
