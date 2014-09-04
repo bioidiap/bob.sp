@@ -144,7 +144,7 @@ bob::sp::Quantization<T>::Quantization(const blitz::Array<T,1>& quant_thres)
 {
   m_thresholds.reference(bob::core::array::ccopy(quant_thres));
   m_type = bob::sp::quantization::USER_SPEC;
-  m_maxLevel = std::numeric_limits<T>::max(); // the max_level is not known
+  m_maxLevel = -1; // the max_level is not known
   m_minLevel = m_thresholds(0);
   m_numLevels = m_thresholds.extent(0);
 }
