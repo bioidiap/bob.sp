@@ -19,9 +19,9 @@ def test_uint8():
   assert quant.min_level == 0
   assert quant.quantization_type == "uniform"
   assert quant.quantization_level(5) == 5
-  
+
 def test_parameters_uint8():
-  
+
   quant = Quantization('uint8', False, 4, 64, 192)
   assert quant.num_levels == 4
   assert quant.max_level == 192
@@ -31,7 +31,7 @@ def test_parameters_uint8():
   res = quant(img)
   expected_res = numpy.array([[0, 0, 1], [1, 2, 2], [2, 3, 3]])
   assert (res == expected_res).all()
-  
+
 def test_uniform_uint16():
 
   quant = Quantization('uint16', False, 8)
@@ -41,13 +41,12 @@ def test_uniform_uint16():
   img = numpy.array([8191, 8192, 16383, 16384], dtype='uint16')
   res = quant(img)
   assert (res == numpy.array([0,1,1,2])).all()
-  
+
 def test_table_uint8():
-  
+
   quantization_table = numpy.array([50, 100, 150, 200, 250], dtype='uint8')
   quant = Quantization(quantization_table = quantization_table)
   assert quant.num_levels == 5
-  assert quant.max_level == 255
   assert quant.min_level == 50
   img = numpy.array([0, 50, 99, 100, 101, 250, 255], dtype='uint8')
   res = quant(img)
