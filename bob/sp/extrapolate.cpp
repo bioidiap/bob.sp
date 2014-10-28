@@ -255,15 +255,3 @@ PyObject* extrapolate(PyObject*, PyObject* args, PyObject* kwds) {
   return 0;
 
 }
-
-/**
-  def("extrapolate_constant", &extrapolateConstant, (arg("src"), arg("dst"), arg("constant")), "Extrapolates the values with a constant, given a 1D or 2D input array.");
-
-  def("extrapolate_zero", &extrapolateZero, (arg("src"), arg("dst")), "Extrapolates the values with zeros, given a 1D or 2D input array.");
-
-  def("extrapolate_nearest", &extrapolateNearest, (arg("src"), arg("dst")), "Extrapolates the values with nearest values, given a 1D or 2D input array.");
-
-  def("extrapolate_circular", &extrapolateCircular, (arg("src"), arg("dst")), "Extrapolates the values using circular extrapolation, given a 1D or 2D input array.");
-
-  def("extrapolate_mirror", &extrapolateMirror, (arg("src"), arg("dst")), "Extrapolates the values using mirroring, given a 1D or 2D input array.");
-**/

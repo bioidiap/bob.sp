@@ -29,12 +29,12 @@ extern PyTypeObject PyBobSpQuantization_Type;
 
 PyDoc_STRVAR(s_extrapolate_str, "extrapolate");
 PyDoc_STRVAR(s_extrapolate_doc,
-"extrapolate(src, dst, [[border=" BOB_EXT_MODULE_PREFIX ".BorderSize.Zero], value=0.]) -> None\n\
+"extrapolate(src, dst, [[border=" BOB_EXT_MODULE_PREFIX ".BorderType.Zero], value=0.]) -> None\n\
 \n\
 Extrapolates values in the given array using the specified border\n\
 type. Works for 1 or 2D input arrays. The parameter ``value`` is\n\
 only used if the border type is set to\n\
-:py:attr:`" BOB_EXT_MODULE_PREFIX ".BorderSize.Constant`. It is,\n\
+:py:attr:`" BOB_EXT_MODULE_PREFIX ".BorderType.Constant`. It is,\n\
 by default, set to ``0.``, or the equivalent on the datatype passed\n\
 as input. For example, ``False``, if the input is boolean and\n\
 0+0j, if it is complex.\n\

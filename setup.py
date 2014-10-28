@@ -18,7 +18,7 @@ setup(
 
     name='bob.sp',
     version=version,
-    description='Bindings for Bob\'s signal processing utilities',
+    description='Bob\'s signal processing utilities',
     url='http://github.com/bioidiap/bob.sp',
     license='BSD',
     author='Andre Anjos',
@@ -88,7 +88,8 @@ setup(
     },
 
     classifiers = [
-      'Development Status :: 3 - Alpha',
+      'Framework :: Bob',
+      'Development Status :: 4 - Beta',
       'Intended Audience :: Developers',
       'License :: OSI Approved :: BSD License',
       'Natural Language :: English',
