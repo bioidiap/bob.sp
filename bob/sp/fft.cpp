@@ -113,8 +113,7 @@ PyObject* fft(PyObject*, PyObject* args, PyObject* kwds) {
     return 0;
   }
 
-  Py_INCREF(output);
-  return PyBlitzArray_NUMPY_WRAP(reinterpret_cast<PyObject*>(output));
+  return PyBlitzArray_NUMPY_WRAP(Py_BuildValue("O", output));
 
 }
 
@@ -165,8 +164,7 @@ PyObject* ifft(PyObject*, PyObject* args, PyObject* kwds) {
     return 0;
   }
 
-  Py_INCREF(output);
-  return PyBlitzArray_NUMPY_WRAP(reinterpret_cast<PyObject*>(output));
+  return PyBlitzArray_NUMPY_WRAP(Py_BuildValue("O", output));
 
 }
 
@@ -219,8 +217,7 @@ PyObject* fftshift(PyObject*, PyObject* args, PyObject* kwds) {
     return 0;
   }
 
-  Py_INCREF(output);
-  return PyBlitzArray_NUMPY_WRAP(reinterpret_cast<PyObject*>(output));
+  return PyBlitzArray_NUMPY_WRAP(Py_BuildValue("O", output));
 
 }
 
@@ -273,7 +270,6 @@ PyObject* ifftshift(PyObject*, PyObject* args, PyObject* kwds) {
     return 0;
   }
 
-  Py_INCREF(output);
-  return PyBlitzArray_NUMPY_WRAP(reinterpret_cast<PyObject*>(output));
+  return PyBlitzArray_NUMPY_WRAP(Py_BuildValue("O", output));
 
 }

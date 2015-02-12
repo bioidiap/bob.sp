@@ -111,8 +111,7 @@ PyObject* dct(PyObject*, PyObject* args, PyObject* kwds) {
     return 0;
   }
 
-  Py_INCREF(output);
-  return PyBlitzArray_NUMPY_WRAP(reinterpret_cast<PyObject*>(output));
+  return PyBlitzArray_NUMPY_WRAP(Py_BuildValue("O", output));
 
 }
 
@@ -162,7 +161,6 @@ PyObject* idct(PyObject*, PyObject* args, PyObject* kwds) {
     return 0;
   }
 
-  Py_INCREF(output);
-  return PyBlitzArray_NUMPY_WRAP(reinterpret_cast<PyObject*>(output));
+  return PyBlitzArray_NUMPY_WRAP(Py_BuildValue("O", output));
 
 }

@@ -62,8 +62,7 @@ static PyObject* create_enumerations() {
 
   if (PyDict_SetItemString(retval, "entries", entries) < 0) return 0;
 
-  Py_INCREF(retval);
-  return retval;
+  return Py_BuildValue("O", retval);
 }
 
 int PyBobSpExtrapolationBorder_Converter(PyObject* o,

@@ -21,14 +21,6 @@
 #include <bob.blitz/cleanup.h>
 #include <bob.core/config.h>
 
-static int dict_set(PyObject* d, const char* key, const char* value) {
-  PyObject* v = Py_BuildValue("s", value);
-  if (!v) return 0;
-  int retval = PyDict_SetItemString(d, key, v);
-  Py_DECREF(v);
-  if (retval == 0) return 1; //all good
-  return 0; //a problem occurred
-}
 
 static int dict_steal(PyObject* d, const char* key, PyObject* value) {
   if (!value) return 0;
@@ -36,6 +28,11 @@ static int dict_steal(PyObject* d, const char* key, PyObject* value) {
   Py_DECREF(value);
   if (retval == 0) return 1; //all good
   return 0; //a problem occurred
+}
+
+static int dict_set(PyObject* d, const char* key, const char* value) {
+  PyObject* v = Py_BuildValue("s", value);
+  return dict_steal(d, key, v);
 }
 
 /**
@@ -158,8 +155,7 @@ static PyObject* create_module (void) {
 
   if (import_bob_blitz() < 0) return 0;
 
-  Py_INCREF(m);
-  return m;
+  return Py_BuildValue("O", m);
 
 }
 

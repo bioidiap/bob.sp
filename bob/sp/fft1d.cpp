@@ -350,8 +350,7 @@ static PyObject* PyBobSpFFT1D_Call
     return 0;
   }
 
-  Py_INCREF(output);
-  return PyBlitzArray_NUMPY_WRAP(reinterpret_cast<PyObject*>(output));
+  return PyBlitzArray_NUMPY_WRAP(Py_BuildValue("O", output));
 
 }
 
