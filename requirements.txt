@@ -1,4 +1,4 @@
 setuptools
-bob.extension
+bob.extension>2.0.4
 bob.blitz
 bob.core

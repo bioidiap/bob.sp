@@ -9,6 +9,7 @@
 
 #include <bob.blitz/cppapi.h>
 #include <bob.blitz/cleanup.h>
+#include <bob.extension/defines.h>
 #include <bob.sp/FFT2D.h>
 
 PyDoc_STRVAR(s_fft2d_str, BOB_EXT_MODULE_PREFIX ".FFT2D");
@@ -181,7 +182,7 @@ static PyObject* PyBobSpFFT2D_GetHeight
 static int PyBobSpFFT2D_SetHeight
 (PyBobSpFFT2DObject* self, PyObject* o, void* /*closure*/) {
 
-  if (!PyArray_IsAnyScalar(o)) {
+  if (!PyBob_NumberCheck(o)) {
     PyErr_Format(PyExc_TypeError, "`%s' height can only be set using a number, not `%s'", Py_TYPE(self)->tp_name, Py_TYPE(o)->tp_name);
     return -1;
   }
@@ -218,7 +219,7 @@ static PyObject* PyBobSpFFT2D_GetWidth
 static int PyBobSpFFT2D_SetWidth
 (PyBobSpFFT2DObject* self, PyObject* o, void* /*closure*/) {
 
-  if (!PyArray_IsAnyScalar(o)) {
+  if (!PyBob_NumberCheck(o)) {
     PyErr_Format(PyExc_TypeError, "`%s' width can only be set using a number, not `%s'", Py_TYPE(self)->tp_name, Py_TYPE(o)->tp_name);
     return -1;
   }

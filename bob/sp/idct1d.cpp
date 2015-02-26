@@ -9,6 +9,7 @@
 
 #include <bob.blitz/cppapi.h>
 #include <bob.blitz/cleanup.h>
+#include <bob.extension/defines.h>
 #include <bob.sp/DCT1D.h>
 
 PyDoc_STRVAR(s_fft1d_str, BOB_EXT_MODULE_PREFIX ".IDCT1D");
@@ -125,7 +126,7 @@ static int PyBobSpIDCT1D_Init(PyBobSpIDCT1DObject* self,
           arg = PyList_GET_ITEM(tmp, 0);
         }
 
-        if (PyArray_IsAnyScalar(arg)) {
+        if (PyBob_NumberCheck(arg)) {
           return PyBobSpIDCT1D_InitShape(self, args, kwds);
         }
 
@@ -199,7 +200,7 @@ static PyObject* PyBobSpIDCT1D_GetLength
 static int PyBobSpIDCT1D_SetLength
 (PyBobSpIDCT1DObject* self, PyObject* o, void* /*closure*/) {
 
-  if (!PyArray_IsAnyScalar(o)) {
+  if (!PyBob_NumberCheck(o)) {
     PyErr_Format(PyExc_TypeError, "`%s' length can only be set using a number, not `%s'", Py_TYPE(self)->tp_name, Py_TYPE(o)->tp_name);
     return -1;
   }
