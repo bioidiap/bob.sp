@@ -181,7 +181,7 @@ static PyObject* PyBobSpDCT2D_GetHeight
 static int PyBobSpDCT2D_SetHeight
 (PyBobSpDCT2DObject* self, PyObject* o, void* /*closure*/) {
 
-  if (!PyNumber_Check(o)) {
+  if (!PyArray_IsAnyScalar(o)) {
     PyErr_Format(PyExc_TypeError, "`%s' height can only be set using a number, not `%s'", Py_TYPE(self)->tp_name, Py_TYPE(o)->tp_name);
     return -1;
   }
@@ -218,7 +218,7 @@ static PyObject* PyBobSpDCT2D_GetWidth
 static int PyBobSpDCT2D_SetWidth
 (PyBobSpDCT2DObject* self, PyObject* o, void* /*closure*/) {
 
-  if (!PyNumber_Check(o)) {
+  if (!PyArray_IsAnyScalar(o)) {
     PyErr_Format(PyExc_TypeError, "`%s' width can only be set using a number, not `%s'", Py_TYPE(self)->tp_name, Py_TYPE(o)->tp_name);
     return -1;
   }

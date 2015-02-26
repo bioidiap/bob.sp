@@ -125,7 +125,7 @@ static int PyBobSpDCT1D_Init(PyBobSpDCT1DObject* self,
           arg = PyList_GET_ITEM(tmp, 0);
         }
 
-        if (PyNumber_Check(arg)) {
+        if (PyArray_IsAnyScalar(arg)) {
           return PyBobSpDCT1D_InitShape(self, args, kwds);
         }
 
@@ -199,7 +199,7 @@ static PyObject* PyBobSpDCT1D_GetLength
 static int PyBobSpDCT1D_SetLength
 (PyBobSpDCT1DObject* self, PyObject* o, void* /*closure*/) {
 
-  if (!PyNumber_Check(o)) {
+  if (!PyArray_IsAnyScalar(o)) {
     PyErr_Format(PyExc_TypeError, "`%s' length can only be set using a number, not `%s'", Py_TYPE(self)->tp_name, Py_TYPE(o)->tp_name);
     return -1;
   }
