@@ -9,6 +9,7 @@ from ._library import *
 from . import version
 from .version import module as __version__
 
+
 def extrapolate_zero(src, dst):
   """Extrapolates the values in ``src`` to ``dst`` with zeros.
 
@@ -28,6 +29,7 @@ def extrapolate_zero(src, dst):
   """
 
   return extrapolate(src, dst, BorderType.Zero)
+
 
 def extrapolate_mirror(src, dst):
   """Extrapolates the values in ``src`` to ``dst``, mirroring ``src``.
@@ -49,6 +51,7 @@ def extrapolate_mirror(src, dst):
 
   return extrapolate(src, dst, BorderType.Mirror)
 
+
 def extrapolate_nearest(src, dst):
   """Extrapolates the values in ``src`` to ``dst``, with nearest values.
 
@@ -68,6 +71,7 @@ def extrapolate_nearest(src, dst):
   """
 
   return extrapolate(src, dst, BorderType.NearestNeighbour)
+
 
 def extrapolate_constant(src, dst, constant):
   """Extrapolates the values in ``src`` to ``dst``, with a constant value.
@@ -94,6 +98,7 @@ def extrapolate_constant(src, dst, constant):
 
   return extrapolate(src, dst, BorderType.Constant, constant)
 
+
 def extrapolate_circular(src, dst):
   """Extrapolates the values in ``src`` to ``dst``, using circular
   extrapolation.
@@ -115,24 +120,12 @@ def extrapolate_circular(src, dst):
 
   return extrapolate(src, dst, BorderType.Circular)
 
+
 def get_config():
   """Returns a string containing the configuration information.
   """
+  return bob.extension.get_config(__name__, version.externals, version.api)
 
-  import pkg_resources
-  from .version import externals
-
-  packages = pkg_resources.require(__name__)
-  this = packages[0]
-  deps = packages[1:]
-
-  retval =  "%s: %s (%s)\n" % (this.key, this.version, this.location)
-  retval += "  - c/c++ dependencies:\n"
-  for k in sorted(externals): retval += "    - %s: %s\n" % (k, externals[k])
-  retval += "  - python dependencies:\n"
-  for d in deps: retval += "    - %s: %s (%s)\n" % (d.key, d.version, d.location)
-
-  return retval.strip()
 
 # gets sphinx autodoc done right - don't remove it
 __all__ = [_ for _ in dir() if not _.startswith('_')]

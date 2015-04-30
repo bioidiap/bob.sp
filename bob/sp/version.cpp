@@ -20,6 +20,7 @@
 #include <bob.blitz/capi.h>
 #include <bob.blitz/cleanup.h>
 #include <bob.core/config.h>
+#include <bob.sp/config.h>
 
 
 static int dict_steal(PyObject* d, const char* key, PyObject* value) {
@@ -112,8 +113,7 @@ static PyObject* build_version_dictionary() {
   if (!dict_steal(retval, "bob.blitz", bob_blitz_version())) return 0;
   if (!dict_steal(retval, "bob.core", bob_core_version())) return 0;
 
-  Py_INCREF(retval);
-  return retval;
+  return Py_BuildValue("O", retval);
 }
 
 static PyMethodDef module_methods[] = {
@@ -152,6 +152,7 @@ static PyObject* create_module (void) {
   PyObject* externals = build_version_dictionary();
   if (!externals) return 0;
   if (PyModule_AddObject(m, "externals", externals) < 0) return 0;
+  if (PyModule_AddIntConstant(m, "api", BOB_SP_API_VERSION) < 0) return 0;
 
   if (import_bob_blitz() < 0) return 0;
 
