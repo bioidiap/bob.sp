@@ -294,9 +294,6 @@ static PyObject* create_module (void) {
   if (!m) return 0;
   auto m_ = make_safe(m); ///< protects against early returns
 
-  if (PyModule_AddStringConstant(m, "__version__", BOB_EXT_MODULE_VERSION) < 0)
-    return 0;
-
   /* register the types to python */
   Py_INCREF(&PyBobSpFFT1D_Type);
   if (PyModule_AddObject(m, "FFT1D", (PyObject *)&PyBobSpFFT1D_Type) < 0) return 0;
@@ -355,7 +352,6 @@ static PyObject* create_module (void) {
   }
 
   return Py_BuildValue("O", m);
-
 }
 
 PyMODINIT_FUNC BOB_EXT_ENTRY_NAME (void) {
