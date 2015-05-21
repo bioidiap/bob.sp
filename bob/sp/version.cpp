@@ -5,11 +5,12 @@
  * @brief Binds configuration information available from bob
  */
 
+#include <bob.sp/config.h>
+
 #define BOB_IMPORT_VERSION
 #include <bob.blitz/config.h>
 #include <bob.blitz/cleanup.h>
 #include <bob.core/config.h>
-#include <bob.sp/config.h>
 
 
 static PyObject* build_version_dictionary() {
@@ -65,7 +66,6 @@ static PyObject* create_module (void) {
   PyObject* externals = build_version_dictionary();
   if (!externals) return 0;
   if (PyModule_AddObject(m, "externals", externals) < 0) return 0;
-
 
   return Py_BuildValue("O", m);
 }
