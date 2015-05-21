@@ -15,6 +15,8 @@ int PyBobSp_APIVersion = BOB_SP_API_VERSION;
 #endif
 #include <bob.blitz/capi.h>
 #include <bob.blitz/cleanup.h>
+#include <bob.core/api.h>
+
 
 extern PyTypeObject PyBobSpFFT1D_Type;
 extern PyTypeObject PyBobSpIFFT1D_Type;
@@ -345,11 +347,8 @@ static PyObject* create_module (void) {
   if (PyModule_AddObject(m, "_C_API", c_api_object) < 0) return 0;
 
   /* imports dependencies */
-  if (import_bob_blitz() < 0) {
-    PyErr_Print();
-    PyErr_Format(PyExc_ImportError, "cannot import `%s'", BOB_EXT_MODULE_NAME);
-    return 0;
-  }
+  if (import_bob_blitz() < 0) return 0;
+  if (import_bob_core_logging() < 0) return 0;
 
   return Py_BuildValue("O", m);
 }
