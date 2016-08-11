@@ -21,7 +21,7 @@
 
 This package is part of the signal-processing and machine learning toolbox
 Bob_. 
-Bob’s Signal Processing Routines.
+Bob's Signal Processing Routines.
 
 
 Installation
