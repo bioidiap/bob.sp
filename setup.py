@@ -20,7 +20,7 @@ setup(
     name='bob.sp',
     version=version,
     description='Bob\'s signal processing utilities',
-    url='http://github.com/bioidiap/bob.sp',
+    url='http://gitlab.idiap.ch/bob/bob.sp',
     license='BSD',
     author='Andre Anjos',
     author_email='andre.anjos@idiap.ch',
