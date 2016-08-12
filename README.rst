@@ -15,13 +15,12 @@
    :target: https://pypi.python.org/pypi/bob.sp
 
 
-=========================
- Signal Processing of Bob
-=========================
+============================
+ Signal Processing Routines
+============================
 
 This package is part of the signal-processing and machine learning toolbox
-Bob_. 
-Bob's Signal Processing Routines.
+Bob_. It contains core signal processing routines.
 
 
 Installation
