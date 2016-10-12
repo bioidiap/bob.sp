@@ -1,0 +1,4 @@
+c:type bob
+c:type sp
+c:type Extrapolation
+c:type BorderType
