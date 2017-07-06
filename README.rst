@@ -2,9 +2,9 @@
 .. Thu 11 Aug 15:26:31 CEST 2016
 
 .. image:: http://img.shields.io/badge/docs-stable-yellow.svg
-   :target: http://pythonhosted.org/bob.sp/index.html
+   :target: https://www.idiap.ch/software/bob/docs/bob/bob.sp/stable/index.html
 .. image:: http://img.shields.io/badge/docs-latest-orange.svg
-   :target: https://www.idiap.ch/software/bob/docs/latest/bob/bob.sp/master/index.html
+   :target: https://www.idiap.ch/software/bob/docs/bob/bob.sp/master/index.html
 .. image:: https://gitlab.idiap.ch/bob/bob.sp/badges/master/build.svg
    :target: https://gitlab.idiap.ch/bob/bob.sp/commits/master
 .. image:: https://gitlab.idiap.ch/bob/bob.sp/badges/master/coverage.svg
@@ -12,8 +12,6 @@
 .. image:: https://img.shields.io/badge/gitlab-project-0000c0.svg
    :target: https://gitlab.idiap.ch/bob/bob.sp
 .. image:: http://img.shields.io/pypi/v/bob.sp.svg
-   :target: https://pypi.python.org/pypi/bob.sp
-.. image:: http://img.shields.io/pypi/dm/bob.sp.svg
    :target: https://pypi.python.org/pypi/bob.sp
 
 
@@ -28,7 +26,7 @@ Bob_. It contains core signal processing routines.
 Installation
 ------------
 
-Complete Bob's `installation`_ instructions. Then, to install this pacakge,
+Complete Bob's `installation`_ instructions. Then, to install this package,
 run::
 
   $ conda install bob.sp
