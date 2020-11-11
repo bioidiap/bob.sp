@@ -43,7 +43,7 @@ BorderType Interface
 
    An enumeration type that defines several ways to handle the border of an image during convolution.
 
-.. c:function:: PyBobSpExtrapolationBorder_Converter(PyObject*, bob::sp::Extrapolation::BorderType*)
+.. c:function:: int PyBobSpExtrapolationBorder_Converter(PyObject* o, BorderType* b)
 
    This function is meant to be used with :c:func:`PyArg_ParseTupleAndKeywords` family of functions in the Python C-API.
    It converts an arbitrary input object into a ``bob::sp::Extrapolation::BorderType`` object.
